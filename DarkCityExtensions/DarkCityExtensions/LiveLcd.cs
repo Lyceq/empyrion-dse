@@ -1,6 +1,7 @@
 ﻿using DarkCity.Tokenizers;
 using Eleon.Modding;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace DarkCity
@@ -31,7 +32,7 @@ namespace DarkCity
                 if ((header == null) || (header.Trim() != liveLcdPhrase)) return;
 
                 DarkCity.LogDebug($"Processing LiveLCD in {structure.Entity.Name} ({structure.Entity.Id}) @ {position}.");
-                ILcd target = null;
+                List<ILcd> targets = new List<ILcd>();
 
                 // Process source LCD configuration.
                 string line = config.ReadLine();
@@ -51,8 +52,16 @@ namespace DarkCity
                         {
                             // Gives the custom name of the LCD device that will display the results of formatted string from this LCD.
                             case "target":
-                                target = structure.GetDevice<ILcd>(value);
-                                DarkCity.LogDebug((target == null) ? $"Could not find target LCD {value}." : $"Found target LCD {value}.");
+                                ILcd target = structure.GetDevice<ILcd>(value);
+                                if (target == null)
+                                {
+                                    DarkCity.LogDebug($"Could not find LiveLCD target {value}.");
+                                }
+                                else
+                                {
+                                    DarkCity.LogDebug($"Found LiveLCD target {value}.");
+                                    targets.Add(target);
+                                }
                                 break;
 
                             // Ignore unknown config directives.
@@ -65,14 +74,18 @@ namespace DarkCity
 
 
                 // Validate configuration.
-                if (target == null)
+                if (targets.Count < 1)
                 {
                     DarkCity.LogDebug("Live LCD did not specify a target LCD or it could not be found.");
                     return;
                 }
 
-                // Read the rest of the source LCD text as a string format specifier and apply it to the target LCD.
-                target.SetText(tokens.Tokenize(config.ReadToEnd()));
+                // Read the rest of the source LCD text as a string format specifier and apply it to the target LCDs.
+                string data = tokens.Tokenize(config.ReadToEnd());
+                foreach (ILcd target in targets)
+                {
+                    target?.SetText(data);
+                }
             }
             catch (Exception ex)
             {
