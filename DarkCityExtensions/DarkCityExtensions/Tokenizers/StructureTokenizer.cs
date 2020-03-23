@@ -17,18 +17,12 @@ namespace DarkCity.Tokenizers
         public IStructure Structure { get; private set; }
 
         /// <summary>
-        /// An EntityTokenizer that will tokenize the Entity property of the IStructure instance.
-        /// </summary>
-        protected EntityTokenizer entityTokenizer { get; private set; }
-
-        /// <summary>
         /// Creates a StructureTokenizer that provides access to data about the structure via token names.
         /// </summary>
         /// <param name="structure">The IStructure instance used to provide data values for the tokens.</param>
         public StructureTokenizer(IStructure structure)
         {
             this.Structure = structure;
-            this.entityTokenizer = new EntityTokenizer(structure?.Entity);
             this.Update();
         }
 
@@ -41,8 +35,6 @@ namespace DarkCity.Tokenizers
             }
             else
             {
-                this.entityTokenizer.Update();
-
                 this.tokens["StructureID"] = this.Structure.Id.ToString();
                 this.tokens["Damage"] = (this.Structure.DamageLevel * 100.0).ToString("F2");
                 this.tokens["Powered"] = this.Structure.IsPowered ? "Yes" : "No";
@@ -64,11 +56,6 @@ namespace DarkCity.Tokenizers
                 signals = signals.Concat<SenderSignal>(this.Structure.GetControlPanelSignals()).ToList();
                 this.TokenizeSignalList(signals);
             }
-        }
-
-        public override string Tokenize(string format)
-        {
-            return base.Tokenize(this.entityTokenizer.Tokenize(format));
         }
 
         /// <summary>

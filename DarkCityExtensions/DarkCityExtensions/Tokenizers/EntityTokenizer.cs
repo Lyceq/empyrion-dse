@@ -12,6 +12,8 @@ namespace DarkCity.Tokenizers
         /// </summary>
         protected IEntity Entity { get; private set; }
 
+        public StructureTokenizer StructureTokens { get; private set; }
+
         /// <summary>
         /// Creates an EntityTokenizer that provides access to the entity data via token names.
         /// </summary>
@@ -19,9 +21,13 @@ namespace DarkCity.Tokenizers
         public EntityTokenizer(IEntity entity)
         {
             this.Entity = entity;
+            if (this.Entity?.Structure != null) this.StructureTokens = new StructureTokenizer(this.Entity.Structure);
             this.Update();
         }
 
+        /// <summary>
+        /// Processes Entity data into the token dictionary.
+        /// </summary>
         public override void Update()
         {
             if (this.Entity == null)
@@ -37,6 +43,19 @@ namespace DarkCity.Tokenizers
                 this.TokenizeVector3(this.Entity.Position, "Position");
                 this.TokenizeQuaternion(this.Entity.Rotation, "Heading");
             }
+        }
+
+        /// <summary>
+        /// Processes a string for tokens and replaces them with the token value. Token names must be enclosed in curly braces. This includes tokens from the entity's structure, if available.
+        /// </summary>
+        /// <param name="format">The string containing tokens to be replaced.</param>
+        /// <returns>A string with the tokens replaced.</returns>
+        public override string Tokenize(string format)
+        {
+            if (this.StructureTokens != null)
+                return base.Tokenize(this.StructureTokens.Tokenize(format));
+            else
+                return base.Tokenize(format);
         }
 
         /// <summary>

@@ -81,12 +81,13 @@ namespace DarkCity
 		/// <param name="entity">The IEntity instance to be examined.</param>
 		private void ProcessEntity(IEntity entity)
 		{
+			EntityTokenizer entityTokens = null;
+
 			// Process structure data of the entity.
 			IStructure structure = entity.Structure;
 			if (structure != null)
 			{
 				DarkCity.LogDebug($"Processing structure {structure.Entity.Name}");
-				StructureTokenizer structTokens = null;
 				
 				// Process LCD devices.
 				IDevicePosList list = structure.GetDevices(DeviceTypeName.LCD);
@@ -99,11 +100,11 @@ namespace DarkCity
 						if (lcd != null)
 						{
 							// Prep structure tokens if not available yet.
-							if (structTokens == null)
-								structTokens = new StructureTokenizer(structure);
+							if (entityTokens == null)
+								entityTokens = new EntityTokenizer(entity);
 
 							// Hand off ILcd device to any potentially interested processors.
-							LiveLcd.Process(structure, lcd, position, structTokens);
+							LiveLcd.Process(structure, lcd, position, entityTokens);
 						}
 					}
 				}

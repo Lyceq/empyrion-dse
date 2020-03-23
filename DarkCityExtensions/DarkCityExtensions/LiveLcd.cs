@@ -22,7 +22,7 @@ namespace DarkCity
         /// <param name="source">The ILcd device to be processed for LiveLCD code.</param>
         /// <param name="position">VectorInt3 containing the position of the ILcd device within the structure.</param>
         /// <param name="tokens">Token collection representing data from the parent structure.</param>
-        public static void Process(IStructure structure, ILcd source, VectorInt3 position, StructureTokenizer tokens)
+        public static void Process(IStructure structure, ILcd source, VectorInt3 position, Tokenizer tokens)
         {
             try
             {
