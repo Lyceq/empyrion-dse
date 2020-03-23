@@ -1,0 +1,18 @@
+﻿# Name appears in Empyrion logs.
+Name: Dark City Extensions
+
+Description: Custom extensions from the Dark City Strangers.
+
+# Append your name to the list if you contribute to this mod.
+Author: Andrew McNiel
+
+# Increment the revision number whenever you commit changes.
+# Increment the minor number whenever to add a new feature.
+# Increment the major number whenever the mod is updated to be compatible with a new major Empyrion release.
+# Current Empyrion release supported: Alpha 11.
+Version: 1.0.0
+Website: https://dark-city.atlassian.net/wiki/spaces/EM/overview
+
+# Possible targets: None, Dedi, PfServer, Client (the latter three can be combined)
+# Note: If not set 'Dedi' is the default
+ModTargets: PfServer
