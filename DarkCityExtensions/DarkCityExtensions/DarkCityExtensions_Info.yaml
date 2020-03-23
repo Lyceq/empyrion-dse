@@ -10,7 +10,7 @@ Author: Andrew McNiel
 # Increment the minor number whenever to add a new feature.
 # Increment the major number whenever the mod is updated to be compatible with a new major Empyrion release.
 # Current Empyrion release supported: Alpha 11.
-Version: 1.0.0
+Version: 1.0.1
 Website: https://dark-city.atlassian.net/wiki/spaces/EM/overview
 
 # Possible targets: None, Dedi, PfServer, Client (the latter three can be combined)
