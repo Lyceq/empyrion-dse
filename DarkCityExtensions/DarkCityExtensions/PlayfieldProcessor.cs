@@ -15,6 +15,7 @@ namespace DarkCity
 		/// The IPlayfield that this processor handles.
 		/// </summary>
 		public IPlayfield Playfield { get; }
+		public PlayfieldTokenizer PlayfieldTokens { get; private set; }
 
 		private Thread processor;
 		private bool process = true;
@@ -23,10 +24,11 @@ namespace DarkCity
 		public PlayfieldProcessor(IPlayfield playfield)
 		{
 			this.Playfield = playfield;
+			this.PlayfieldTokens = new PlayfieldTokenizer(playfield);
 
 			DarkCity.LogInfo($"Launching thread to process entities in playfield {playfield.Name}.");
 
-			processor = new Thread(new ThreadStart(this.ProcessEntities));
+			processor = new Thread(new ThreadStart(this.ProcessPlayfield));
 			processor.Name = $"DCE entity processor for playfield {playfield.Name}";
 			processor.IsBackground = true;
 			processor.Start();
@@ -42,10 +44,9 @@ namespace DarkCity
 		}
 
 		/// <summary>
-		/// Processes IEntity instances from the playfield. Interesting entities are dispatched to other feature processeors for handling. Unhandled exceptions are caught here
-		/// to prevent the mod from causing issues with the game server. If you want to add a new feature, hook it into the ProcessEntity method.
+		/// Processes the playfield. Repeats processing until <see cref="process"/> is false. Each loop will take a minimum of <see cref="loopTime"/>. Intended to be launched in a thread.
 		/// </summary>
-		private void ProcessEntities()
+		private void ProcessPlayfield()
 		{
 			DateTime loopStart;
 			while (this.process)
@@ -54,23 +55,38 @@ namespace DarkCity
 
 				try
 				{
-					// Process all entities in the playfield for this client/pfserver.
 					loopStart = DateTime.Now;
-					DarkCity.LogDebug($"Processing entities in {this.Playfield.Name}.");
-					Dictionary<int, IEntity> entities = this.Playfield.Entities;
-					if (entities != null)
-					{
-						foreach (IEntity entity in entities.Values)
-						{
-							this.ProcessEntity(entity);
-						}
-					}
+					DarkCity.LogDebug($"Processing playfield {this.Playfield.Name}.");
 
+					this.PlayfieldTokens.Update();
+
+					this.ProcessEntities();
+
+					// Done processing. Sleep thread for remaining loopTime.
 					Thread.Sleep(loopTime - (DateTime.Now - loopStart));
-				} catch (Exception ex)
+				}
+				catch (Exception ex)
 				{
 					DarkCity.LogError($"Unhandled exception in entity processor: {ex.Message}. Sleeping it off.");
 					Thread.Sleep(loopTime);
+				}
+			}
+
+		}
+
+		/// <summary>
+		/// Processes IEntity instances from the playfield. Interesting entities are dispatched to other feature processeors for handling. Unhandled exceptions are caught here
+		/// to prevent the mod from causing issues with the game server. If you want to add a new feature, hook it into the ProcessEntity method.
+		/// </summary>
+		private void ProcessEntities()
+		{
+			DarkCity.LogDebug($"Processing entities in {this.Playfield.Name}.");
+			Dictionary<int, IEntity> entities = this.Playfield.Entities;
+			if (entities != null)
+			{
+				foreach (IEntity entity in entities.Values)
+				{
+					this.ProcessEntity(entity);
 				}
 			}
 		}
@@ -81,6 +97,8 @@ namespace DarkCity
 		/// <param name="entity">The IEntity instance to be examined.</param>
 		private void ProcessEntity(IEntity entity)
 		{
+			if (entity == null) return;
+
 			EntityTokenizer entityTokens = null;
 
 			// Process structure data of the entity.
@@ -104,7 +122,7 @@ namespace DarkCity
 								entityTokens = new EntityTokenizer(entity);
 
 							// Hand off ILcd device to any potentially interested processors.
-							LiveLcd.Process(structure, lcd, position, entityTokens);
+							LiveLcd.Process(structure, lcd, position, entityTokens, this.PlayfieldTokens);
 						}
 					}
 				}

@@ -59,6 +59,7 @@
     <Compile Include="DarkCity.cs" />
     <Compile Include="Tokenizers\EntityTokenizer.cs" />
     <Compile Include="Tokenizers\FactionTokenizer.cs" />
+    <Compile Include="Tokenizers\PlayfieldTokenizer.cs" />
     <Compile Include="Tokenizers\StructureTokenizer.cs" />
     <Compile Include="Tokenizers\Tokenizer.cs" />
   </ItemGroup>

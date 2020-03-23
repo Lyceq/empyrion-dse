@@ -26,6 +26,9 @@ namespace DarkCity.Tokenizers
             this.Update();
         }
 
+        /// <summary>
+        /// Updates tokens with the latest structure data.
+        /// </summary>
         public override void Update()
         {
             if (this.Structure == null)

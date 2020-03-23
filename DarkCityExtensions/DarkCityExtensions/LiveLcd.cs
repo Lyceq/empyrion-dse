@@ -22,7 +22,7 @@ namespace DarkCity
         /// <param name="source">The ILcd device to be processed for LiveLCD code.</param>
         /// <param name="position">VectorInt3 containing the position of the ILcd device within the structure.</param>
         /// <param name="tokens">Token collection representing data from the parent structure.</param>
-        public static void Process(IStructure structure, ILcd source, VectorInt3 position, Tokenizer tokens)
+        public static void Process(IStructure structure, ILcd source, VectorInt3 position, Tokenizer tokens, PlayfieldTokenizer playfieldTokens)
         {
             try
             {
@@ -82,6 +82,13 @@ namespace DarkCity
 
                 // Read the rest of the source LCD text as a string format specifier and apply it to the target LCDs.
                 string data = tokens.Tokenize(config.ReadToEnd());
+                if (playfieldTokens != null)
+                {
+                    playfieldTokens.UpdateWithPosition(structure.Entity.Position);
+                    playfieldTokens.UpdateWithFaction(structure.Entity.Faction.Id);
+                    data = playfieldTokens.Tokenize(data);
+                }
+
                 foreach (ILcd target in targets)
                 {
                     target?.SetText(data);

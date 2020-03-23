@@ -5,7 +5,7 @@ namespace DarkCity.Tokenizers
     /// <summary>
     /// Tokenizes a FactionData instance. Currently not tested. Use at your own risk.
     /// </summary>
-    class FactionTokenizer : Tokenizer
+    public class FactionTokenizer : Tokenizer
     {
         public FactionData Faction { get; private set; }
 
