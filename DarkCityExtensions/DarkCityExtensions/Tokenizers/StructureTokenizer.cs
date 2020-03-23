@@ -44,7 +44,7 @@ namespace DarkCity.Tokenizers
                 this.entityTokenizer.Update();
 
                 this.tokens["StructureID"] = this.Structure.Id.ToString();
-                this.tokens["Damage"] = this.Structure.DamageLevel.ToString("F2");
+                this.tokens["Damage"] = (this.Structure.DamageLevel * 100.0).ToString("F2");
                 this.tokens["Powered"] = this.Structure.IsPowered ? "Yes" : "No";
                 this.tokens["Pilot"] = this.Structure.Pilot?.Name ?? "None";
 
