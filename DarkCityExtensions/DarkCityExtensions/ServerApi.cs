@@ -1,8 +1,6 @@
 ﻿using Eleon.Modding;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DarkCity
 {
@@ -10,8 +8,9 @@ namespace DarkCity
     /// Handles requests to the legacy GameModAPI and dispatches the response events to callback delegates.
     /// These functions only work when the mod is loaded by a server; either a dedicated server or single player client.
     /// If the GameModAPI is not availble then the callback delegate is immediately invoked with null data.
+    /// Also provides events for information coming from the server that is not a reponse to a request.
     /// </summary>
-    public static class LegacyCmd
+    public class ServerApi
     {
         /// <summary>
         /// Sequence number used to identify responses from Empyrion that are intended for this mod.
@@ -22,13 +21,14 @@ namespace DarkCity
         /// Stores a queue of delegates for each CmdId. When the CmdId is received by <see cref="DispatchEvent"/> then the data is passed to the next available delegate.
         /// </summary>
         private static Dictionary<CmdId, Queue<Delegate>> callbacks = new Dictionary<CmdId, Queue<Delegate>>();
+        // All instances of ServerApi will share a common delegate queue.
 
         /// <summary>
         /// Enqueues a callback delegate for a specific CmdId.
         /// </summary>
         /// <param name="cmd">The event CmdId that is expected to be received from Empyrion.</param>
         /// <param name="callback">A callback delegate that will receive the data from the event. Data will be an object that must be cast into the data type associated with the event.</param>
-        private static void AddCallback(CmdId cmd, Delegate callback)
+        private void AddCallback(CmdId cmd, Delegate callback)
         {
             if (DarkCity.LegacyApi == null)
             {
@@ -51,7 +51,7 @@ namespace DarkCity
         /// </summary>
         /// <param name="cmd">The event CmdId received from Empyrion.</param>
         /// <param name="data">A data object received with the event. The callback delegate will need to cast it to the type associated with the event.</param>
-        public static void DispatchEvent(CmdId cmd, object data)
+        public void DispatchEvent(CmdId cmd, object data)
         {
             if (callbacks.ContainsKey(cmd))
             {
@@ -67,7 +67,7 @@ namespace DarkCity
         /// Requests a list of entity IDs for all logged in players.
         /// </summary>
         /// <param name="callback">Callback for receiving the IdList response.</param>
-        public static void RequestPlayerList(Action<IdList> callback)
+        public void RequestPlayerList(Action<IdList> callback)
         {
             AddCallback(CmdId.Event_Player_List, callback);
             DarkCity.LegacyApi.Game_Request(CmdId.Request_Player_List, SequenceNumber, null);
@@ -78,7 +78,7 @@ namespace DarkCity
         /// </summary>
         /// <param name="playerId">The entity ID of the player to request info about.</param>
         /// <param name="callback">Callback for receiving the PlayerInfo response.</param>
-        public static void RequestPlayerInfo(int playerId, Action<PlayerInfo> callback)
+        public void RequestPlayerInfo(int playerId, Action<PlayerInfo> callback)
         {
             AddCallback(CmdId.Event_Player_Info, callback);
             DarkCity.LegacyApi.Game_Request(CmdId.Request_Player_Info, SequenceNumber, new Id(playerId));
@@ -88,7 +88,7 @@ namespace DarkCity
         /// Requests all structures and their info, including in unloaded playfields.
         /// </summary>
         /// <param name="callback">Callback for receiving the GlobalStructureList response.</param>
-        public static void RequestGlobalStructureList(Action<GlobalStructureList> callback)
+        public void RequestGlobalStructureList(Action<GlobalStructureList> callback)
         {
             AddCallback(CmdId.Event_GlobalStructure_List, callback);
             DarkCity.LegacyApi.Game_Request(CmdId.Request_GlobalStructure_List, SequenceNumber, null);
@@ -99,7 +99,7 @@ namespace DarkCity
         /// </summary>
         /// <param name="structureId">Structure ID of the structure that the block statistics are about.</param>
         /// <param name="callback">Callback for receiving the IdStructureBlockInfo response.</param>
-        public static void RequestStructureBlockStatistics(int structureId, Action<IdStructureBlockInfo> callback)
+        public void RequestStructureBlockStatistics(int structureId, Action<IdStructureBlockInfo> callback)
         {
             AddCallback(CmdId.Event_Structure_BlockStatistics, callback);
             DarkCity.LegacyApi.Game_Request(CmdId.Request_Structure_BlockStatistics, SequenceNumber, new Id(structureId));
@@ -109,7 +109,7 @@ namespace DarkCity
         /// Requests information about all factions.
         /// </summary>
         /// <param name="callback">Callback for receiving the FactionInfoList response.</param>
-        public static void RequestGetFactions(Action<FactionInfoList> callback)
+        public void RequestGetFactions(Action<FactionInfoList> callback)
         {
             // 1 is the magic number to request faction info for all factions.
             RequestGetFactions(1, callback);
@@ -120,7 +120,7 @@ namespace DarkCity
         /// </summary>
         /// <param name="factionId">The faction ID of the faction to request info about.</param>
         /// <param name="callback">Callback for receiving the FactionInfoList response.</param>
-        public static void RequestGetFactions(int factionId, Action<FactionInfoList> callback)
+        public void RequestGetFactions(int factionId, Action<FactionInfoList> callback)
         {
             AddCallback(CmdId.Event_Get_Factions, callback);
             DarkCity.LegacyApi.Game_Request(CmdId.Request_Get_Factions, SequenceNumber, new Id(factionId));
@@ -131,7 +131,7 @@ namespace DarkCity
         /// The in-game message is a box that appears in the upper-right of the screen, much like a base attack message. Id will be the entity ID of the player to receive the message.
         /// </summary>
         /// <param name="data">Parameters that define the look and content of the message.</param>
-        public static void RequestInGameMessageSinglePlayer(IdMsgPrio data)
+        public void RequestInGameMessageSinglePlayer(IdMsgPrio data)
         {
             // No callback for this request.
             DarkCity.LegacyApi.Game_Request(CmdId.Request_InGameMessage_SinglePlayer, SequenceNumber, data);
@@ -142,7 +142,7 @@ namespace DarkCity
         /// Id will be the faction ID of the faction to receive the message.
         /// </summary>
         /// <param name="data">Parameters that define the look and content of the message.</param>
-        public static void RequestInGameMessageFaction(IdMsgPrio data)
+        public void RequestInGameMessageFaction(IdMsgPrio data)
         {
             // No callback for this request.
             DarkCity.LegacyApi.Game_Request(CmdId.Request_InGameMessage_Faction, SequenceNumber, data);
@@ -153,7 +153,7 @@ namespace DarkCity
         /// The in-game message is a box that appears in the upper-right of the screen, much like a base attack message. Id is ignored.
         /// </summary>
         /// <param name="data">Parameters that define the look and content of the message.</param>
-        public static void RequestInGameMessageAllPlayers(IdMsgPrio data)
+        public void RequestInGameMessageAllPlayers(IdMsgPrio data)
         {
             // No callback for this request.
             DarkCity.LegacyApi.Game_Request(CmdId.Request_InGameMessage_AllPlayers, SequenceNumber, data);
@@ -165,7 +165,7 @@ namespace DarkCity
         /// <param name="data"></param>
         /// <param name="callback">Callback to receive the IdAndIntValue response. Id will be the entity ID of the player that responded and int will be the button that was selected.
         /// 0 refers to the positive button (PosButtonText) and 1 refers to the negative button (NegButtonText).</param>
-        public static void RequestShowDialogSinglePlayer(DialogBoxData data, Action<IdAndIntValue> callback)
+        public void RequestShowDialogSinglePlayer(DialogBoxData data, Action<IdAndIntValue> callback)
         {
             AddCallback(CmdId.Event_DialogButtonIndex, callback);
             DarkCity.LegacyApi.Game_Request(CmdId.Request_ShowDialog_SinglePlayer, SequenceNumber, data);

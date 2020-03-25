@@ -58,6 +58,22 @@ namespace DarkCity
 					loopStart = DateTime.Now;
 					DarkCity.LogDebug($"Processing playfield {this.Playfield.Name}.");
 
+					DarkCity.Server.RequestPlayerList(list =>
+					{
+						if (list == null)
+						{
+							DarkCity.LogInfo("RequestPlayerList returned null data.");
+						}
+						else if (list.list == null)
+						{
+							DarkCity.LogInfo("RequestPlayerList returned data with null list.");
+						}
+						else
+						{
+							DarkCity.LogInfo($"RequestPlayerList return list {string.Join<int>(", ", list.list)}.");
+						}
+					});
+
 					this.PlayfieldTokens.Update();
 
 					this.ProcessEntities();

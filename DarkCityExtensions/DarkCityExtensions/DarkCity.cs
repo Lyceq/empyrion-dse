@@ -1,5 +1,6 @@
 ﻿using Eleon.Modding;
 using System.Collections.Generic;
+using System;
 
 namespace DarkCity
 {
@@ -8,20 +9,26 @@ namespace DarkCity
 	/// </summary>
 	public class DarkCity : IMod, ModInterface
 	{
+
 		/// <summary>
 		/// Provides access to the EmpyrionApi for use by any classes in the mod.
 		/// </summary>
 		public static IModApi EmpyrionApi;
 
 		/// <summary>
-		/// Provides access to the Empyrion legacy API. Normally used only for interacting with dedicated servers (not clients or playfield servers).
+		/// Provides access to the Empyrion legacy API. Used for both dedicated server and clients that are hosts. Best to use <see cref="Server"/> for easier access.
 		/// </summary>
 		public static ModGameAPI LegacyApi;
 
 		/// <summary>
-		/// Provides access to the Empyrion game instance.
+		/// Provides access to the Empyrion game instance. Used for both client and playfield server.
 		/// </summary>
 		public static IApplication Application;
+
+		/// <summary>
+		/// Provides access to the Empyrion server instance. Used for both dedicated server and clients that are hosts.
+		/// </summary>
+		public static ServerApi Server { get; private set; }
 
 		/// <summary>
 		/// A collection of IPlayfield processors. Key is the name of the playfield.
@@ -124,25 +131,21 @@ namespace DarkCity
 		/// </summary>
 		public void Game_Update()
 		{
-			if (++update_counter % 20 == 0)
+			Server.RequestPlayerList(list =>
 			{
-				LegacyCmd.RequestPlayerList(list =>
+				if (list == null)
 				{
-					if (list == null)
-					{
-						DarkCity.LogInfo("RequestPlayerList returned null data.");
-					}
-					else if (list.list == null)
-					{
-						DarkCity.LogInfo("RequestPlayerList returned data with null list.");
-					}
-					else
-					{
-						DarkCity.LogInfo($"RequestPlayerList return list {string.Join<int>(", ", list.list)}.");
-					}
-				});
-			}
-				
+					DarkCity.LogInfo("RequestPlayerList returned null data.");
+				}
+				else if (list.list == null)
+				{
+					DarkCity.LogInfo("RequestPlayerList returned data with null list.");
+				}
+				else
+				{
+					DarkCity.LogInfo($"RequestPlayerList return list {string.Join<int>(", ", list.list)}.");
+				}
+			});
 		}
 
 		/// <summary>
@@ -160,10 +163,10 @@ namespace DarkCity
 		/// <param name="data">A data structure containing specifics about the event. Must be cast into the right object based on the eventId.</param>
 		public void Game_Event(CmdId eventId, ushort seqNr, object data)
 		{
-			if (seqNr == LegacyCmd.SequenceNumber)
+			if (seqNr == ServerApi.SequenceNumber)
 			{
 				// Event was generated as a result of a request from this mod. Dispatch the data to the requestor.
-				LegacyCmd.DispatchEvent(eventId, data);
+				Server.DispatchEvent(eventId, data);
 				return;
 			} else if (seqNr == 0)
 			{
