@@ -1,6 +1,6 @@
 ﻿using Eleon.Modding;
 using System.Collections.Generic;
-using System;
+using DarkCity.Configuration;
 
 namespace DarkCity
 {
@@ -26,6 +26,16 @@ namespace DarkCity
 		public static IApplication Application;
 
 		/// <summary>
+		/// Provides access to Empyrion localization strings.
+		/// </summary>
+		public static Localization Localization;
+
+		/// <summary>
+		/// Provides access to the Empyrion configuration information.
+		/// </summary>
+		public static EmpyrionConfiguration Configuration;
+
+		/// <summary>
 		/// Provides access to the Empyrion server instance. Used for both dedicated server and clients that are hosts.
 		/// </summary>
 		public static ServerApi Server { get; private set; }
@@ -34,6 +44,8 @@ namespace DarkCity
 		/// A collection of IPlayfield processors. Key is the name of the playfield.
 		/// </summary>
 		public Dictionary<string, PlayfieldProcessor> PlayfieldProcessors = new Dictionary<string, PlayfieldProcessor>();
+
+		public static bool LiveLcd { get; private set; } = false;
 
 		/// <summary>
 		/// Normally instanced by Empyrion when it wants to load the mod. Which Empyrion processed load the mod is controlled in DarkCityExtensions_Info.yaml
@@ -80,21 +92,66 @@ namespace DarkCity
 #endif
 		}
 
-		#endregion
+        #endregion
 
-		#region "IMod Methods"
+        #region "Initialization Methods"
 
-		/// <summary>
-		/// Called by Empyrion when the mod is first loaded.
-		/// </summary>
-		/// <param name="modAPI">Provides access to the Empyrion game state.</param>
-		public void Init(IModApi modAPI)
+		private void InitializeDedicatedServer()
+		{
+			LogDebug("Invoked InitializeDedicatedServer.");
+		}
+
+		private void InitializePlayfieldServer()
+		{
+			LogDebug("Invoked InitializePlayfieldServer");
+
+			LiveLcd = true;
+		}
+
+		private void InitializeClient()
+		{
+			LogDebug("Invoked InitializeClient");
+
+		}
+
+		private void InitializeSinglePlayer()
+		{
+			LogDebug("Invoked InitializeSinglePlayer");
+
+		}
+
+        #endregion
+
+        #region "IMod Methods"
+
+        /// <summary>
+        /// Called by Empyrion when the mod is first loaded.
+        /// </summary>
+        /// <param name="modAPI">Provides access to the Empyrion game state.</param>
+        public void Init(IModApi modAPI)
 		{
 			EmpyrionApi = modAPI;
 			Application = modAPI.Application;
 
 			Application.OnPlayfieldLoaded += Application_OnPlayfieldLoaded;
 			Application.OnPlayfieldUnloading += Application_OnPlayfieldUnloading;
+
+			string contentPath = Application.GetPathFor(AppFolder.Content);
+
+			if (Localization != null) Localization = new Localization(contentPath + @"\Extras\Localization.csv");
+			if (Configuration != null)
+			{
+				Configuration = new EmpyrionConfiguration(contentPath + @"Configuration\Config_Example.ecf");
+				try
+				{
+					Configuration.Load(contentPath + @"Configuration\Config.ecf");
+					LogInfo("Loaded custom configuration file.");
+				}
+				catch { LogInfo("Did not load custom configuration file."); }
+			}
+
+			if (Application.Mode == ApplicationMode.Client)
+				this.InitializeClient();
 
 			EmpyrionApi.Log("Dark City server extension loaded.");
 		}
@@ -123,15 +180,15 @@ namespace DarkCity
 		public void Game_Start(ModGameAPI dediAPI)
 		{
 			LegacyApi = dediAPI;
+			Server = new ServerApi();
 		}
 
-		static int update_counter = 0;
 		/// <summary>
 		/// Called by Empyrion every update tick. Deprecated, recommended to use the Update event in IApplication.
 		/// </summary>
 		public void Game_Update()
 		{
-			Server.RequestPlayerList(list =>
+			Server?.RequestPlayerList(list =>
 			{
 				if (list == null)
 				{
@@ -166,7 +223,7 @@ namespace DarkCity
 			if (seqNr == ServerApi.SequenceNumber)
 			{
 				// Event was generated as a result of a request from this mod. Dispatch the data to the requestor.
-				Server.DispatchEvent(eventId, data);
+				Server?.DispatchEvent(eventId, data);
 				return;
 			} else if (seqNr == 0)
 			{

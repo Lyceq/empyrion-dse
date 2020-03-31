@@ -23,6 +23,8 @@ namespace DarkCity
         private static Dictionary<CmdId, Queue<Delegate>> callbacks = new Dictionary<CmdId, Queue<Delegate>>();
         // All instances of ServerApi will share a common delegate queue.
 
+        public ServerApi() { }
+
         /// <summary>
         /// Enqueues a callback delegate for a specific CmdId.
         /// </summary>

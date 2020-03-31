@@ -122,23 +122,26 @@ namespace DarkCity
 			if (structure != null)
 			{
 				DarkCity.LogDebug($"Processing structure {structure.Entity.Name}");
-				
-				// Process LCD devices.
-				IDevicePosList list = structure.GetDevices(DeviceTypeName.LCD);
-				if (list != null)
-				{
-					for (int i = 0; i < list.Count; i++)
-					{
-						VectorInt3 position = list.GetAt(i);
-						ILcd lcd = structure.GetDevice<ILcd>(position);
-						if (lcd != null)
-						{
-							// Prep structure tokens if not available yet.
-							if (entityTokens == null)
-								entityTokens = new EntityTokenizer(entity);
 
-							// Hand off ILcd device to any potentially interested processors.
-							LiveLcd.Process(structure, lcd, position, entityTokens, this.PlayfieldTokens);
+				if (DarkCity.LiveLcd)
+				{
+					// Process LCD devices.
+					IDevicePosList list = structure.GetDevices(DeviceTypeName.LCD);
+					if (list != null)
+					{
+						for (int i = 0; i < list.Count; i++)
+						{
+							VectorInt3 position = list.GetAt(i);
+							ILcd lcd = structure.GetDevice<ILcd>(position);
+							if (lcd != null)
+							{
+								// Prep structure tokens if not available yet.
+								if (entityTokens == null)
+									entityTokens = new EntityTokenizer(entity);
+
+								// Hand off ILcd device to any potentially interested processors.
+								LiveLcd.Process(structure, lcd, position, entityTokens, this.PlayfieldTokens);
+							}
 						}
 					}
 				}
