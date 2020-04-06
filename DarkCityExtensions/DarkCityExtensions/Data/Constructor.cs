@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DarkCity.Configuration
+namespace DarkCity.Data
 {
     /// <summary>
     /// A constructor that takes inputs to produce an item from it. Each constructor has a different speed and item templates may allow only specific constructors.

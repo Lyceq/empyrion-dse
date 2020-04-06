@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{374E7D46-8559-453D-ABFA-72DB98351526}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DarkCity</RootNamespace>
-    <AssemblyName>DarkCityExtensions</AssemblyName>
+    <ProjectGuid>{3D93BB7A-A27C-476E-84B7-66A2E6F46A63}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>DseTesting</RootNamespace>
+    <AssemblyName>DseTesting</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,63 +33,67 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Csv, Version=1.0.53.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Csv.1.0.53\lib\net40\Csv.dll</HintPath>
-    </Reference>
     <Reference Include="Mif">
       <HintPath>G:\Steam\steamapps\common\Empyrion - Galactic Survival\Client\Empyrion_Data\Managed\Mif.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="ModApi">
       <HintPath>G:\Steam\steamapps\common\Empyrion - Galactic Survival\Client\Empyrion_Data\Managed\ModApi.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>G:\Steam\steamapps\common\Empyrion - Galactic Survival\Client\Empyrion_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\Block.cs" />
-    <Compile Include="Configuration\ChildObject.cs" />
-    <Compile Include="Configuration\ConfigurationReader.cs" />
-    <Compile Include="Configuration\DropOnDestroy.cs" />
-    <Compile Include="Data\Constructor.cs" />
-    <Compile Include="Configuration\CraftingTemplate.cs" />
-    <Compile Include="Data\MaterialType.cs" />
-    <Compile Include="Data\DeconstructorOverride.cs" />
-    <Compile Include="Configuration\EmpyrionConfiguration.cs" />
-    <Compile Include="Configuration\EmpyrionObject.cs" />
-    <Compile Include="Configuration\EmpyrionObjectType.cs" />
-    <Compile Include="Configuration\Property.cs" />
-    <Compile Include="Data\ItemManifest.cs" />
-    <Compile Include="Localization.cs" />
-    <Compile Include="ServerApi.cs" />
-    <Compile Include="PlayfieldProcessor.cs" />
-    <Compile Include="LiveLcd.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NaturalTreeNodeSorter.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DarkCity.cs" />
-    <Compile Include="Simulators\ConstructionSimulationResults.cs" />
-    <Compile Include="Simulators\ConstructionSimulator.cs" />
-    <Compile Include="Tokenizers\EntityTokenizer.cs" />
-    <Compile Include="Tokenizers\FactionTokenizer.cs" />
-    <Compile Include="Tokenizers\PlayfieldTokenizer.cs" />
-    <Compile Include="Tokenizers\StructureTokenizer.cs" />
-    <Compile Include="Tokenizers\Tokenizer.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DarkCityExtensions_Info.yaml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="packages.config" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DarkCityExtensions\DarkCityExtensions.csproj">
+      <Project>{374e7d46-8559-453d-abfa-72db98351526}</Project>
+      <Name>DarkCityExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

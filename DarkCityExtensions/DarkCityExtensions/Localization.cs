@@ -9,9 +9,11 @@ namespace DarkCity
 {
     public class Localization
     {
-        private Dictionary<string, Dictionary<string, string>> localization = new Dictionary<string, Dictionary<string, string>>();
+        private Dictionary<string, Dictionary<string, string>> localization;
         
         public Dictionary<string, string> SelectedLanguage { get; private set; }
+
+        public string SelectedLanguageName { get; private set; }
         
         public List<string> Languages { get; private set; }
 
@@ -66,6 +68,26 @@ namespace DarkCity
         public string RPM { get { return this.SelectedLanguage["utsRpm"]; } }
 
         /// <summary>
+        /// English: L
+        /// </summary>
+        public string Liter { get { return this.SelectedLanguage["utsLiter"]; } }
+
+        /// <summary>
+        /// English: PU
+        /// </summary>
+        public string Watt { get { return this.SelectedLanguage["utsWatt"]; } }
+
+        /// <summary>
+        /// English: PUh
+        /// </summary>
+        public string WattHour { get { return this.SelectedLanguage["utsWattHour"]; } }
+
+        /// <summary>
+        /// English: SU
+        /// </summary>
+        public string Volume { get { return this.SelectedLanguage["utsVolume"]; } }
+
+        /// <summary>
         /// English: kg
         /// </summary>
         public string Kilogram { get { return this.SelectedLanguage["utsKilogram"]; } }
@@ -79,6 +101,11 @@ namespace DarkCity
         /// English: kt
         /// </summary>
         public string Kiloton { get { return this.SelectedLanguage["utsKiloton"]; } }
+
+        /// <summary>
+        /// English: deg/s
+        /// </summary>
+        public string CentigratePerSecond { get { return this.SelectedLanguage["utsCentiDegreesPerSec"]; } }
 
         /// <summary>
         /// English: deg/s²
@@ -230,18 +257,13 @@ namespace DarkCity
             using (StreamReader file = File.OpenText(path))
             {
                 CsvOptions options = new CsvOptions();
-                //options.HeaderMode = HeaderMode.HeaderAbsent;
+                options.AllowSingleQuoteToEncloseFieldValues = true;
 
-                //IEnumerator<ICsvLine> lines = CsvReader.Read(file, options).GetEnumerator();
-
-                // Process header
-                //ICsvLine header = lines.Current;
-                //header.
-
-                foreach (ICsvLine line in CsvReader.Read(file))
+                foreach (ICsvLine line in CsvReader.Read(file, options))
                 {
                     if (this.localization == null)
                     {
+                        this.localization = new Dictionary<string, Dictionary<string, string>>();
                         this.Languages = new List<string>(line.Headers);
                         this.Languages.RemoveAt(0); // Remove the key index.
 
@@ -255,6 +277,7 @@ namespace DarkCity
 
                     // Each line of the localization file contains a phrase, with each field being a different language of the prhase.
                     // The first field (phrase[0]) is the lookup key of that phrase.
+                    if (line.Headers.Length != line.Values.Length) continue;
                     for (int i = 1; i < line.ColumnCount; i++)
                         this.localization[line.Headers[i]][line[0]] = line[i];
                 }
@@ -269,6 +292,7 @@ namespace DarkCity
                 throw new Exception($"The language {language} is not supported by the Empyrion localization database.");
 
             this.SelectedLanguage = this.localization[language];
+            this.SelectedLanguageName = language;
         }
     }
 }

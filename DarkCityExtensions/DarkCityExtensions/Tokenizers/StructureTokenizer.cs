@@ -1,4 +1,5 @@
 ﻿using Eleon.Modding;
+using DarkCity.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +59,21 @@ namespace DarkCity.Tokenizers
                 List<SenderSignal> signals = this.Structure.GetBlockSignals();
                 signals = signals.Concat<SenderSignal>(this.Structure.GetControlPanelSignals()).ToList();
                 this.TokenizeSignalList(signals);
+
+                // Get a manifest of all items in the structure.
+                ItemManifest manifest = new ItemManifest();
+                manifest.Add(this.Structure);
+
+                // Buckets of item totals, each will get their own tag.
+                Dictionary<string, int> allItems = new Dictionary<string, int>();
+                Dictionary<string, int> ammoItems = new Dictionary<string, int>();
+                Dictionary<string, int> foodItems = new Dictionary<string, int>();
+                Dictionary<string, int> oreItems = new Dictionary<string, int>();
+                Dictionary<string, int> ingotItems = new Dictionary<string, int>();
+                foreach (KeyValuePair<int, int> count in manifest.GetItemTotals())
+                {
+
+                }
             }
         }
 

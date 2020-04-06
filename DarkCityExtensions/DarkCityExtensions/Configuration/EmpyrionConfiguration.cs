@@ -11,12 +11,21 @@ namespace DarkCity.Configuration
 
         public int Version { get; set; }
 
-        public Dictionary<string, CraftingTemplate> TemplatesByName { get; set; }
+        public Dictionary<string, EmpyrionObject> ObjectsByKey { get; set; } = new Dictionary<string, EmpyrionObject>();
+        public Dictionary<int, EmpyrionObject> ObjectsByID { get; set; } = new Dictionary<int, EmpyrionObject>();
+        public Dictionary<string, EmpyrionObject> ObjectsByName { get; set; } = new Dictionary<string, EmpyrionObject>();
+        public Dictionary<int, Block> BlocksByID { get; set; } = new Dictionary<int, Block>();
+        public Dictionary<string, Block> BlocksByName { get; set; } = new Dictionary<string, Block>();
+        public Dictionary<int, EmpyrionObject> ContainersByID { get; set; } = new Dictionary<int, EmpyrionObject>();
+        public Dictionary<string, EmpyrionObject> EntitiesByName { get; set; } = new Dictionary<string, EmpyrionObject>();
+        public Dictionary<int, EmpyrionObject> ItemsByID { get; set; } = new Dictionary<int, EmpyrionObject>();
+        public Dictionary<string, EmpyrionObject> ItemsByName { get; set; } = new Dictionary<string, EmpyrionObject>();
+        public Dictionary<string, EmpyrionObject> LootGroupsByName { get; set; } = new Dictionary<string, EmpyrionObject>();
+        public Dictionary<string, CraftingTemplate> TemplatesByName { get; set; } = new Dictionary<string, CraftingTemplate>();
 
         public EmpyrionConfiguration()
         {
             this.Version = 8;
-            this.TemplatesByName = new Dictionary<string, CraftingTemplate>();
         }
 
         public EmpyrionConfiguration(string path) : this()
@@ -26,48 +35,78 @@ namespace DarkCity.Configuration
 
         public void Load(string path)
         {
-            StreamReader file = File.OpenText(path);
-            string line = ""; // Raw line of text from file.
-            string trim; // Trimmed line of text from file.
-            string lower; // Trimmed and lower-cased line of text from file.
-
-            while (line != null)
+            using (StreamReader file = File.OpenText(path))
             {
-                line = file.ReadLine();
-                trim = line?.Trim();
-                lower = trim?.ToLower();
-                if (string.IsNullOrEmpty(trim)) continue; // Ignore blank lines.
-                else if (lower.StartsWith("#")) continue; // Ignore comments.
-                else if (lower.StartsWith("{"))
+                ConfigurationReader reader = new ConfigurationReader(file);
+                KeyValuePair<string, string> line = reader.ReadParsedLine();
+                while (line.Key != null)
                 {
-                    // Line starts the definition of a new object. Detect the object type and pass control to the object for reading its configuration.
-                    Tuple<EmpyrionObjectType, int?, string, string> header = ParseObjectHeader(line);
-                    switch (header.Item1)
+                    if (line.Key == "{")
                     {
-                        case EmpyrionObjectType.Block: this.SkipObject(file); break;
-                        case EmpyrionObjectType.Item: this.SkipObject(file); break;
-                        case EmpyrionObjectType.Entity: this.SkipObject(file); break;
-                        case EmpyrionObjectType.Template:
-                            if (string.IsNullOrEmpty(header.Item3) || !this.TemplatesByName.ContainsKey(header.Item3))
+                        // Line starts the definition of a new object. Detect the object type and pass control to the object for reading its configuration.
+                        Tuple<EmpyrionObjectType, int?, string, string> header = ParseObjectHeader(line.Value);
+                        string key = (header.Item2?.ToString() ?? "") + header.Item3;
+                        if (this.ObjectsByKey.ContainsKey(key))
+                        {
+                            this.ObjectsByKey[key].ParseConfig(reader);
+                        }
+                        else
+                        {
+                            EmpyrionObject obj = null;
+                            switch (header.Item1)
                             {
-                                CraftingTemplate template = new CraftingTemplate(this, header, file);
-                                this.TemplatesByName[template.Name] = template;
-                            } else
-                            {
-                                this.TemplatesByName[header.Item3].ParseConfig(file);
-                            }
-                            break;
+                                case EmpyrionObjectType.Block:
+                                    Block block = new Block(this, header, reader);
+                                    obj = block;
+                                    this.BlocksByID[block.ID ?? -1] = block;
+                                    this.BlocksByName[block.Name] = block;
+                                    break;
 
-                        case EmpyrionObjectType.Container: this.SkipObject(file); break;
-                        case EmpyrionObjectType.LootGroup: this.SkipObject(file); break;
-                        default: throw new Exception($"Unknown object type encountered in line: {line}");
+                                case EmpyrionObjectType.Container:
+                                    obj = new EmpyrionObject(this, header, reader);
+                                    this.ContainersByID[obj.ID ?? -1] = obj;
+                                    break;
+
+                                case EmpyrionObjectType.Entity:
+                                    obj = new EmpyrionObject(this, header, reader);
+                                    this.EntitiesByName[obj.Name] = obj;
+                                    break;
+
+                                case EmpyrionObjectType.Item:
+                                    obj = new EmpyrionObject(this, header, reader);
+                                    this.ItemsByID[obj.ID ?? -1] = obj;
+                                    this.ItemsByName[obj.Name] = obj;
+                                    break;
+
+                                case EmpyrionObjectType.LootGroup:
+                                    obj = new EmpyrionObject(this, header, reader);
+                                    this.LootGroupsByName[obj.Name] = obj;
+                                    break;
+
+                                case EmpyrionObjectType.Template:
+                                    CraftingTemplate template = new CraftingTemplate(this, header, reader);
+                                    obj = template;
+                                    this.TemplatesByName[template.Name] = template;
+                                    break;
+
+                                default: obj = new EmpyrionObject(this, header, reader); break;
+                            }
+
+                            this.ObjectsByKey[obj.Key] = obj;
+                            if (obj.ID != null) this.ObjectsByID[obj.ID ?? -1] = obj;
+                            if (!string.IsNullOrWhiteSpace(obj.Name)) this.ObjectsByName[obj.Name] = obj;
+                        }
                     }
-                } else if (lower.StartsWith("version"))
-                {
-                    this.Version = Int32.Parse(lower.Replace("version", "").Trim(superTrim));
-                } else
-                {
-                    throw new Exception($"Unparsable line encountered: {line}");
+                    else if (line.Key.ToLower() == "version")
+                    {
+                        this.Version = Int32.Parse(line.Value);
+                    }
+                    else
+                    {
+                        throw new Exception($"Unparsable line encountered: {line}");
+                    }
+
+                    line = reader.ReadParsedLine();
                 }
             }
         }
@@ -86,7 +125,7 @@ namespace DarkCity.Configuration
             } while (!line.StartsWith("}"));
         }
 
-        private static Regex objectParse = new Regex(@"[\s{]*(?<type>block|item|entity|template|container|lootgroup)\s+(?:id:\s*(?<id>\d+))?,?\s*(?:name:\s*(?<name>\S+))?,?\s*(?:ref:\s*(?<ref>\S+))?", RegexOptions.IgnoreCase);
+        private static Regex objectParse = new Regex(@"[\s{]*(?<type>block|item|entity|template|container|lootgroup)\s+(?:id:\s*(?<id>\d+))?,?\s*(?:name:\s*(?<name>[^\s,]+))?,?\s*(?:ref:\s*(?<ref>\S+))?", RegexOptions.IgnoreCase);
         public static Tuple<EmpyrionObjectType, int?, string, string> ParseObjectHeader(string header)
         {
             Match m = objectParse.Match(header);
@@ -97,10 +136,17 @@ namespace DarkCity.Configuration
                     (m.Groups["id"]?.Success ?? false) ? (int?)int.Parse(m.Groups["id"].Value) : null,
                     (m.Groups["name"]?.Success ?? false) ? m.Groups["name"].Value : null,
                     (m.Groups["ref"]?.Success ?? false) ? m.Groups["ref"].Value : null);
-            } else
+            }
+            else
             {
                 throw new Exception($"Unable to parse object header: {header}");
             }
+        }
+
+        public static EmpyrionObjectType DetectObjectType(string header)
+        {
+            string[] words = header.Split(' ');
+            return words[0].ToEmpyrionObjectType();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DarkCity.Configuration
+namespace DarkCity.Data
 {
     /// <summary>
     /// Deconstructer override directive. Controls the behavior of the deconstructor when working on a type of item.
