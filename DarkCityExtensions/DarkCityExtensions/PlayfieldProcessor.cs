@@ -56,23 +56,7 @@ namespace DarkCity
 				try
 				{
 					loopStart = DateTime.Now;
-					DarkCity.LogDebug($"Processing playfield {this.Playfield.Name}.");
-
-					DarkCity.Server.RequestPlayerList(list =>
-					{
-						if (list == null)
-						{
-							DarkCity.LogInfo("RequestPlayerList returned null data.");
-						}
-						else if (list.list == null)
-						{
-							DarkCity.LogInfo("RequestPlayerList returned data with null list.");
-						}
-						else
-						{
-							DarkCity.LogInfo($"RequestPlayerList return list {string.Join<int>(", ", list.list)}.");
-						}
-					});
+					//DarkCity.LogDebug($"Processing playfield {this.Playfield.Name}.");
 
 					this.PlayfieldTokens.Update();
 
@@ -83,7 +67,7 @@ namespace DarkCity
 				}
 				catch (Exception ex)
 				{
-					DarkCity.LogError($"Unhandled exception in entity processor: {ex.Message}. Sleeping it off.");
+					DarkCity.LogError($"Unhandled exception in entity processor for {this.Playfield.Name}: {ex.Message}" + Environment.NewLine + ex.StackTrace);
 					Thread.Sleep(loopTime);
 				}
 			}
@@ -96,7 +80,7 @@ namespace DarkCity
 		/// </summary>
 		private void ProcessEntities()
 		{
-			DarkCity.LogDebug($"Processing entities in {this.Playfield.Name}.");
+			//DarkCity.LogDebug($"Processing entities in {this.Playfield.Name}.");
 			Dictionary<int, IEntity> entities = this.Playfield.Entities;
 			if (entities != null)
 			{
@@ -121,7 +105,7 @@ namespace DarkCity
 			IStructure structure = entity.Structure;
 			if (structure != null)
 			{
-				DarkCity.LogDebug($"Processing structure {structure.Entity.Name}");
+				//DarkCity.LogDebug($"Processing structure {structure.Entity.Name}");
 
 				if (DarkCity.LiveLcd)
 				{

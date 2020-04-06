@@ -31,7 +31,7 @@ namespace DarkCity
                 string header = config.ReadLine();
                 if ((header == null) || (header.Trim() != liveLcdPhrase)) return;
 
-                DarkCity.LogDebug($"Processing LiveLCD in {structure.Entity.Name} ({structure.Entity.Id}) @ {position}.");
+                //DarkCity.LogDebug($"Processing LiveLCD in {structure.Entity.Name} ({structure.Entity.Id}) @ {position}.");
                 List<ILcd> targets = new List<ILcd>();
 
                 // Process source LCD configuration.
@@ -59,7 +59,7 @@ namespace DarkCity
                                 }
                                 else
                                 {
-                                    DarkCity.LogDebug($"Found LiveLCD target {value}.");
+                                    //DarkCity.LogDebug($"Found LiveLCD target {value}.");
                                     targets.Add(target);
                                 }
                                 break;

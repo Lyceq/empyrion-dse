@@ -13,27 +13,27 @@ namespace DarkCity
 		/// <summary>
 		/// Provides access to the EmpyrionApi for use by any classes in the mod.
 		/// </summary>
-		public static IModApi EmpyrionApi;
+		public static IModApi EmpyrionApi = null;
 
 		/// <summary>
 		/// Provides access to the Empyrion legacy API. Used for both dedicated server and clients that are hosts. Best to use <see cref="Server"/> for easier access.
 		/// </summary>
-		public static ModGameAPI LegacyApi;
+		public static ModGameAPI LegacyApi = null;
 
 		/// <summary>
 		/// Provides access to the Empyrion game instance. Used for both client and playfield server.
 		/// </summary>
-		public static IApplication Application;
+		public static IApplication Application = null;
 
 		/// <summary>
 		/// Provides access to Empyrion localization strings.
 		/// </summary>
-		public static Localization Localization;
+		public static Localization Localization = null;
 
 		/// <summary>
 		/// Provides access to the Empyrion configuration information.
 		/// </summary>
-		public static EmpyrionConfiguration Configuration;
+		public static EmpyrionConfiguration Configuration = null;
 
 		/// <summary>
 		/// Provides access to the Empyrion server instance. Used for both dedicated server and clients that are hosts.
@@ -98,26 +98,28 @@ namespace DarkCity
 
 		private void InitializeDedicatedServer()
 		{
-			LogDebug("Invoked InitializeDedicatedServer.");
+			LogInfo("Initializing for dedicated server mode.");
 		}
 
 		private void InitializePlayfieldServer()
 		{
-			LogDebug("Invoked InitializePlayfieldServer");
+			LogInfo("Initializing for playfield server mode.");
 
 			LiveLcd = true;
 		}
 
 		private void InitializeClient()
 		{
-			LogDebug("Invoked InitializeClient");
+			LogInfo("Initializing for client mode.");
 
+			LiveLcd = true;
 		}
 
 		private void InitializeSinglePlayer()
 		{
-			LogDebug("Invoked InitializeSinglePlayer");
+			LogInfo("Initializing for single player mode.");
 
+			LiveLcd = true;
 		}
 
         #endregion
@@ -138,20 +140,26 @@ namespace DarkCity
 
 			string contentPath = Application.GetPathFor(AppFolder.Content);
 
-			if (Localization != null) Localization = new Localization(contentPath + @"\Extras\Localization.csv");
-			if (Configuration != null)
+			if (Localization == null) Localization = new Localization(contentPath + @"\Extras\Localization.csv");
+			if (Configuration == null)
 			{
-				Configuration = new EmpyrionConfiguration(contentPath + @"Configuration\Config_Example.ecf");
+				Configuration = new EmpyrionConfiguration(contentPath + @"\Configuration\Config_Example.ecf");
+				LogInfo("Loaded default configuration file.");
 				try
 				{
-					Configuration.Load(contentPath + @"Configuration\Config.ecf");
+					Configuration.Load(contentPath + @"\Configuration\Config.ecf");
 					LogInfo("Loaded custom configuration file.");
 				}
 				catch { LogInfo("Did not load custom configuration file."); }
 			}
 
-			if (Application.Mode == ApplicationMode.Client)
-				this.InitializeClient();
+			switch (Application.Mode)
+			{
+				case ApplicationMode.Client: this.InitializeClient(); break;
+				case ApplicationMode.DedicatedServer: this.InitializeDedicatedServer(); break;
+				case ApplicationMode.PlayfieldServer: this.InitializePlayfieldServer(); break;
+				case ApplicationMode.SinglePlayer: this.InitializeSinglePlayer(); break;
+			}
 
 			EmpyrionApi.Log("Dark City server extension loaded.");
 		}
@@ -188,21 +196,6 @@ namespace DarkCity
 		/// </summary>
 		public void Game_Update()
 		{
-			Server?.RequestPlayerList(list =>
-			{
-				if (list == null)
-				{
-					DarkCity.LogInfo("RequestPlayerList returned null data.");
-				}
-				else if (list.list == null)
-				{
-					DarkCity.LogInfo("RequestPlayerList returned data with null list.");
-				}
-				else
-				{
-					DarkCity.LogInfo($"RequestPlayerList return list {string.Join<int>(", ", list.list)}.");
-				}
-			});
 		}
 
 		/// <summary>
