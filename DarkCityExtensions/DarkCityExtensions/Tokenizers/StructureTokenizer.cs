@@ -35,7 +35,7 @@ namespace DarkCity.Tokenizers
             if (this.Structure == null)
             {
                 this.tokens.Clear();
-                DarkCity.LogWarn("Attempted to tokenize a null structure.");
+                Log.Warn("Attempted to tokenize a null structure.");
             }
             else
             {
@@ -61,10 +61,10 @@ namespace DarkCity.Tokenizers
                 this.TokenizeSignalList(signals);
 
                 // Get a manifest of all items in the structure.
-                ItemManifest manifest = new ItemManifest();
-                manifest.Add(this.Structure);
+                //ItemManifest manifest = new ItemManifest();
+                //manifest.Add(this.Structure);
 
-                if (DarkCity.Configuration != null)
+                if (EmpyrionExtension.Configuration != null)
                 {
                     // Buckets of item totals, each will get their own tag.
                     Dictionary<string, int> allItems = new Dictionary<string, int>();
@@ -72,36 +72,36 @@ namespace DarkCity.Tokenizers
                     //Dictionary<string, int> foodItems = new Dictionary<string, int>();
                     //Dictionary<string, int> oreItems = new Dictionary<string, int>();
                     //Dictionary<string, int> ingotItems = new Dictionary<string, int>();
-                    foreach (KeyValuePair<int, int> count in manifest.GetItemTotals())
-                    {
-                        if (DarkCity.Configuration.ObjectsByID.ContainsKey(count.Key))
-                        {
-                            allItems[DarkCity.Configuration.ObjectsByID[count.Key].Name] = count.Value;
-                        }
-                        else
-                        {
-                            DarkCity.LogDebug("Encountered block with unknown ID " + count.Key);
-                            allItems[count.Key.ToString()] = count.Value;
-                        }
-                    }
+                    //foreach (KeyValuePair<int, int> count in manifest.GetItemTotals())
+                    //{
+                    //    if (DarkCity.Configuration.ObjectsByID.ContainsKey(count.Key))
+                    //    {
+                    //        allItems[DarkCity.Configuration.ObjectsByID[count.Key].Name] = count.Value;
+                    //    }
+                    //    else
+                    //    {
+                    //        DarkCity.LogDebug("Encountered block with unknown ID " + count.Key);
+                    //        allItems[count.Key.ToString()] = count.Value;
+                    //    }
+                    //}
 
                     this.TokenizeInventoryCount(allItems, "InventoryAll");
-                } else { DarkCity.LogDebug("Configuration is null."); }
+                } else { Log.Debug("Configuration is null."); }
             }
         }
 
         private void TokenizeInventoryCount(Dictionary<string, int> inventory, string key)
         {
             StringBuilder result = new StringBuilder();
-            if (DarkCity.Localization == null)
+            if (EmpyrionExtension.Localization == null)
             {
-                DarkCity.LogDebug("Localization is null.");
+                Log.Debug("TokenizeInventoryCount cannot use localization.");
                 foreach (KeyValuePair<string, int> item in inventory)
                     result.AppendLine($"{item.Key}: {item.Value}");
             } else
             {
                 foreach (KeyValuePair<string, int> item in inventory)
-                    result.AppendLine($"{DarkCity.Localization[item.Key] ?? item.Key}: {item.Value}");
+                    result.AppendLine($"{EmpyrionExtension.Localization[item.Key] ?? item.Key}: {item.Value}");
             }
             this.tokens[key] = result.ToString();
         }

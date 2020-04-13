@@ -25,7 +25,7 @@ namespace DarkCity.Tokenizers
 
             if (this.Playfield == null)
             {
-                DarkCity.LogWarn("Attempted to tokenize a null playfield.");
+                Log.Warn("Attempted to tokenize a null playfield.");
             }
             else
             {

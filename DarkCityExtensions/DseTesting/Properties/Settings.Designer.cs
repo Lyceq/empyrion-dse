@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DseTesting.Properties {
+namespace DarkCity.Testing.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,32 +25,6 @@ namespace DseTesting.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Empyrion - Galactic Survival\\Conten" +
-            "t\\Configuration\\Config_Example.ecf")]
-        public string EmpyrionConfigurationFile {
-            get {
-                return ((string)(this["EmpyrionConfigurationFile"]));
-            }
-            set {
-                this["EmpyrionConfigurationFile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Empyrion - Galactic Survival\\Conten" +
-            "t\\Extras\\Localization.csv")]
-        public string EmpyrionLocalizationFile {
-            get {
-                return ((string)(this["EmpyrionLocalizationFile"]));
-            }
-            set {
-                this["EmpyrionLocalizationFile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("English")]
         public string LocalizationLanguage {
             get {
@@ -58,6 +32,30 @@ namespace DseTesting.Properties {
             }
             set {
                 this["LocalizationLanguage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Empyrion - Galactic Survival")]
+        public string EmpyrionRootPath {
+            get {
+                return ((string)(this["EmpyrionRootPath"]));
+            }
+            set {
+                this["EmpyrionRootPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("200")]
+        public int TickTime {
+            get {
+                return ((int)(this["TickTime"]));
+            }
+            set {
+                this["TickTime"] = value;
             }
         }
     }

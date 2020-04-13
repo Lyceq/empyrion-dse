@@ -32,7 +32,7 @@ namespace DarkCity
         /// <param name="callback">A callback delegate that will receive the data from the event. Data will be an object that must be cast into the data type associated with the event.</param>
         private void AddCallback(CmdId cmd, Delegate callback)
         {
-            if (DarkCity.LegacyApi == null)
+            if (EmpyrionExtension.LegacyApi == null)
             {
                 // LegacyApi is not availble so a response will never arrive.
                 // This means the process is not owned by a dedicated server.
@@ -72,7 +72,7 @@ namespace DarkCity
         public void RequestPlayerList(Action<IdList> callback)
         {
             AddCallback(CmdId.Event_Player_List, callback);
-            DarkCity.LegacyApi.Game_Request(CmdId.Request_Player_List, SequenceNumber, null);
+            EmpyrionExtension.LegacyApi.Game_Request(CmdId.Request_Player_List, SequenceNumber, null);
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace DarkCity
         public void RequestPlayerInfo(int playerId, Action<PlayerInfo> callback)
         {
             AddCallback(CmdId.Event_Player_Info, callback);
-            DarkCity.LegacyApi.Game_Request(CmdId.Request_Player_Info, SequenceNumber, new Id(playerId));
+            EmpyrionExtension.LegacyApi.Game_Request(CmdId.Request_Player_Info, SequenceNumber, new Id(playerId));
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace DarkCity
         public void RequestGlobalStructureList(Action<GlobalStructureList> callback)
         {
             AddCallback(CmdId.Event_GlobalStructure_List, callback);
-            DarkCity.LegacyApi.Game_Request(CmdId.Request_GlobalStructure_List, SequenceNumber, null);
+            EmpyrionExtension.LegacyApi.Game_Request(CmdId.Request_GlobalStructure_List, SequenceNumber, null);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace DarkCity
         public void RequestStructureBlockStatistics(int structureId, Action<IdStructureBlockInfo> callback)
         {
             AddCallback(CmdId.Event_Structure_BlockStatistics, callback);
-            DarkCity.LegacyApi.Game_Request(CmdId.Request_Structure_BlockStatistics, SequenceNumber, new Id(structureId));
+            EmpyrionExtension.LegacyApi.Game_Request(CmdId.Request_Structure_BlockStatistics, SequenceNumber, new Id(structureId));
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace DarkCity
         public void RequestGetFactions(int factionId, Action<FactionInfoList> callback)
         {
             AddCallback(CmdId.Event_Get_Factions, callback);
-            DarkCity.LegacyApi.Game_Request(CmdId.Request_Get_Factions, SequenceNumber, new Id(factionId));
+            EmpyrionExtension.LegacyApi.Game_Request(CmdId.Request_Get_Factions, SequenceNumber, new Id(factionId));
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace DarkCity
         public void RequestInGameMessageSinglePlayer(IdMsgPrio data)
         {
             // No callback for this request.
-            DarkCity.LegacyApi.Game_Request(CmdId.Request_InGameMessage_SinglePlayer, SequenceNumber, data);
+            EmpyrionExtension.LegacyApi.Game_Request(CmdId.Request_InGameMessage_SinglePlayer, SequenceNumber, data);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace DarkCity
         public void RequestInGameMessageFaction(IdMsgPrio data)
         {
             // No callback for this request.
-            DarkCity.LegacyApi.Game_Request(CmdId.Request_InGameMessage_Faction, SequenceNumber, data);
+            EmpyrionExtension.LegacyApi.Game_Request(CmdId.Request_InGameMessage_Faction, SequenceNumber, data);
         }
 
         /// <summary>
@@ -158,7 +158,7 @@ namespace DarkCity
         public void RequestInGameMessageAllPlayers(IdMsgPrio data)
         {
             // No callback for this request.
-            DarkCity.LegacyApi.Game_Request(CmdId.Request_InGameMessage_AllPlayers, SequenceNumber, data);
+            EmpyrionExtension.LegacyApi.Game_Request(CmdId.Request_InGameMessage_AllPlayers, SequenceNumber, data);
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace DarkCity
         public void RequestShowDialogSinglePlayer(DialogBoxData data, Action<IdAndIntValue> callback)
         {
             AddCallback(CmdId.Event_DialogButtonIndex, callback);
-            DarkCity.LegacyApi.Game_Request(CmdId.Request_ShowDialog_SinglePlayer, SequenceNumber, data);
+            EmpyrionExtension.LegacyApi.Game_Request(CmdId.Request_ShowDialog_SinglePlayer, SequenceNumber, data);
         }
     }
 }

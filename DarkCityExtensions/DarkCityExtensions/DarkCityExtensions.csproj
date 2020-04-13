@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Csv, Version=1.0.53.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Csv.1.0.53\lib\net40\Csv.dll</HintPath>
-    </Reference>
     <Reference Include="Mif">
       <HintPath>G:\Steam\steamapps\common\Empyrion - Galactic Survival\Client\Empyrion_Data\Managed\Mif.dll</HintPath>
       <Private>False</Private>
@@ -56,27 +53,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\Block.cs" />
-    <Compile Include="Configuration\ChildObject.cs" />
-    <Compile Include="Configuration\ConfigurationReader.cs" />
-    <Compile Include="Configuration\DropOnDestroy.cs" />
-    <Compile Include="Data\Constructor.cs" />
-    <Compile Include="Configuration\CraftingTemplate.cs" />
-    <Compile Include="Data\MaterialType.cs" />
-    <Compile Include="Data\DeconstructorOverride.cs" />
-    <Compile Include="Configuration\EmpyrionConfiguration.cs" />
-    <Compile Include="Configuration\EmpyrionObject.cs" />
-    <Compile Include="Configuration\EmpyrionObjectType.cs" />
-    <Compile Include="Configuration\Property.cs" />
-    <Compile Include="Data\ItemManifest.cs" />
-    <Compile Include="Localization.cs" />
+    <Compile Include="Data\DataExtensions.cs" />
+    <Compile Include="GameStateProcessor.cs" />
+    <Compile Include="Network\ModServerHost.cs" />
     <Compile Include="ServerApi.cs" />
     <Compile Include="PlayfieldProcessor.cs" />
     <Compile Include="LiveLcd.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DarkCity.cs" />
-    <Compile Include="Simulators\ConstructionSimulationResults.cs" />
-    <Compile Include="Simulators\ConstructionSimulator.cs" />
+    <Compile Include="EmpyrionExtension.cs" />
     <Compile Include="Tokenizers\EntityTokenizer.cs" />
     <Compile Include="Tokenizers\FactionTokenizer.cs" />
     <Compile Include="Tokenizers\PlayfieldTokenizer.cs" />
@@ -88,6 +72,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DarkCityCore\DarkCityCore.csproj">
+      <Project>{95509260-84bc-4171-b839-516bc609c237}</Project>
+      <Name>DarkCityCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

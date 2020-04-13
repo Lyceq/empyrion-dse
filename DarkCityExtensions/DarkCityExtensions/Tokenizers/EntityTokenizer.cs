@@ -32,7 +32,7 @@ namespace DarkCity.Tokenizers
         {
             if (this.Entity == null)
             {
-                DarkCity.LogWarn("Attempted to tokenize a null entity.");
+                Log.Warn("Attempted to tokenize a null entity.");
             }
             else
             {

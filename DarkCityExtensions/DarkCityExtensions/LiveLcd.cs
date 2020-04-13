@@ -55,7 +55,7 @@ namespace DarkCity
                                 ILcd target = structure.GetDevice<ILcd>(value);
                                 if (target == null)
                                 {
-                                    DarkCity.LogDebug($"Could not find LiveLCD target {value}.");
+                                    Log.Debug($"Could not find LiveLCD target {value}.");
                                 }
                                 else
                                 {
@@ -65,7 +65,7 @@ namespace DarkCity
                                 break;
 
                             // Ignore unknown config directives.
-                            default: DarkCity.LogDebug($"Encountered unknown key {key}; Ignoring."); break;
+                            default: Log.Debug($"Encountered unknown key {key}; Ignoring."); break;
                         }
                     }
 
@@ -76,7 +76,7 @@ namespace DarkCity
                 // Validate configuration.
                 if (targets.Count < 1)
                 {
-                    DarkCity.LogDebug("Live LCD did not specify a target LCD or it could not be found.");
+                    Log.Debug("Live LCD did not specify a target LCD or it could not be found.");
                     return;
                 }
 
@@ -96,7 +96,7 @@ namespace DarkCity
             }
             catch (Exception ex)
             {
-                DarkCity.LogWarn($"Failed to process LCD due to exception ({ex.GetType()}) : {ex.Message}");
+                Log.Warn($"Failed to process LCD due to exception ({ex.GetType()}) : {ex.Message}");
             }
         }
     }
