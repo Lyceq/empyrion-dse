@@ -1,4 +1,5 @@
 ﻿using DarkCity.Network;
+using DarkCity.Trackers;
 using System.IO;
 using System.Windows.Forms;
 
@@ -6,30 +7,51 @@ namespace DarkCity.Tiles
 {
     public partial class Tile : UserControl
     {
+        private Client network = null;
+        private GameStateTracker gameState = null;
+
         /// <summary>
         /// A DarkCity network connection that the tile can use to interact with the game.
         /// </summary>
-        public Connection Network
+        public Client Network
         {
             get { return this.network; }
             set
             {
+                if (this.network == value) return;
                 if (this.network != null) this.network.PacketReceived -= this.DispatchPacket;
                 this.network = value;
                 if (this.network != null) this.network.PacketReceived += this.DispatchPacket;
+                this.OnNetworkChanged();
             }
         }
-        private Connection network = null;
+
+        public GameStateTracker GameState
+        {
+            get => this.gameState;
+            set
+            {
+                if (this.gameState == value) return;
+                if (this.gameState != null) this.gameState.Updated += this.OnGameStateChanged;
+                this.gameState = value;
+                if (this.gameState != null) this.gameState.Updated += this.OnGameStateChanged;
+                this.OnGameStateChanged();
+            }
+        }
 
         public Tile()
         {
             InitializeComponent();
+            this.Dock = DockStyle.Fill;
         }
 
-        public Tile(Connection network) : this()
-        {
-            this.Network = network;
-        }
+        /// <summary>
+        /// A network packet has been received
+        /// </summary>
+        /// <param name="packet"></param>
+        public virtual void OnPacketReceived(Packet packet) { }
+        protected virtual void OnNetworkChanged() { }
+        protected virtual void OnGameStateChanged() { }
 
         /// <summary>
         /// Saves the state of the tile so that it can exhibit the same behavior next time it is loaded.
@@ -49,20 +71,12 @@ namespace DarkCity.Tiles
 
         }
 
-        /// <summary>
-        /// A network packet has been received
-        /// </summary>
-        /// <param name="packet"></param>
-        public virtual void HandlePacket(Packet packet)
-        {
-
-        }
-
-        protected virtual void DispatchPacket(Connection connection, Packet packet)
+        private void DispatchPacket(Client client, Packet packet)
         {
             this.Invoke((MethodInvoker)(() => {
-                this.HandlePacket(packet);
+                this.OnPacketReceived(packet);
             }));
         }
+
     }
 }

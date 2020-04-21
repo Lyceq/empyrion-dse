@@ -52,10 +52,61 @@
     <Compile Include="Companion.Designer.cs">
       <DependentUpon>Companion.cs</DependentUpon>
     </Compile>
+    <Compile Include="LayoutSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LayoutSelection.Designer.cs">
+      <DependentUpon>LayoutSelection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TileLayout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TileLayout.Designer.cs">
+      <DependentUpon>TileLayout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PlaceholderTile.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PlaceholderTile.Designer.cs">
+      <DependentUpon>PlaceholderTile.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OpenConfigurationFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OpenConfigurationFiles.Designer.cs">
+      <DependentUpon>OpenConfigurationFiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OpenRemoteHost.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OpenRemoteHost.Designer.cs">
+      <DependentUpon>OpenRemoteHost.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TileSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TileSelection.Designer.cs">
+      <DependentUpon>TileSelection.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Companion.resx">
       <DependentUpon>Companion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LayoutSelection.resx">
+      <DependentUpon>LayoutSelection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TileLayout.resx">
+      <DependentUpon>TileLayout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlaceholderTile.resx">
+      <DependentUpon>PlaceholderTile.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenConfigurationFiles.resx">
+      <DependentUpon>OpenConfigurationFiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenRemoteHost.resx">
+      <DependentUpon>OpenRemoteHost.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -65,7 +116,11 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="TileSelection.resx">
+      <DependentUpon>TileSelection.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -92,6 +147,21 @@
       <Project>{374e7d46-8559-453d-abfa-72db98351526}</Project>
       <Name>DarkCityExtensions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Add_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Remove_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GlyphDown_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GlyphUp_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PanelDragDropTarget_16x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

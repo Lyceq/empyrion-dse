@@ -1,11 +1,14 @@
 ﻿using DarkCity.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DarkCity.Configuration
 {
     public class Property
     {
+        private static readonly char[] valueTrimChars = new char[] { ' ', '\t', '"', '\'', '\r', '\n' };
+
         public string Key { get; set; }
 
         public string Value { get; set; }
@@ -108,6 +111,126 @@ namespace DarkCity.Configuration
         public string GetFormattedValue()
         {
             return this.Value.ToString();
+        }
+
+        public bool? GetValueAsBoolean()
+        {
+            bool b;
+            if (bool.TryParse(this.Value, out b))
+                return b;
+            return null;
+        }
+
+        public bool? GetSubpropertyAsBoolean(string subproperty)
+        {
+            if (!this.Subproperties.ContainsKey(subproperty)) return null;
+            bool b;
+            if (bool.TryParse(this.Subproperties[subproperty], out b))
+                return b;
+            return null;
+        }
+
+        public int? GetValueAsInt32()
+        {
+            int i;
+            if (int.TryParse(this.Value, out i))
+                return i;
+            return null;
+        }
+
+        public int? GetSubpropertyAsInt32(string subproperty)
+        {
+            if (!this.Subproperties.ContainsKey(subproperty)) return null;
+            int i;
+            if (int.TryParse(this.Subproperties[subproperty], out i))
+                return i;
+            return null;
+        }
+
+        public float? GetValueAsFloat()
+        {
+            float f;
+            if (float.TryParse(this.Value, out f))
+                return f;
+            return null;
+        }
+
+        public float? GetSubpropertyAsFloat(string subproperty)
+        {
+            if (!this.Subproperties.ContainsKey(subproperty)) return null;
+            float f;
+            if (float.TryParse(this.Subproperties[subproperty], out f))
+                return f;
+            return null;
+        }
+
+        public string[] GetValueAsList()
+        {
+            return this.Value?.Trim(valueTrimChars).Split(',').Select(s => s.Trim()).ToArray();
+        }
+
+        public Tuple<int, int> GetValueAsRange()
+        {
+            try
+            {
+                string[] values = this.Value?.Trim(valueTrimChars).Split(',');
+                if (values != null)
+                {
+                    if (values.Length == 1)
+                    {
+                        int i = int.Parse(values[0]);
+                        return new Tuple<int, int>(i, i);
+                    }
+                    else if (values.Length == 2)
+                        return new Tuple<int, int>(int.Parse(values[0]), int.Parse(values[1]));
+                }
+            } catch { }
+            return null;
+        }
+
+        public Tuple<int, int> GetSubpropertyAsRange(string subproperty)
+        {
+            if (!this.Subproperties.ContainsKey(subproperty)) return null;
+            try
+            {
+                string[] values = this.Subproperties[subproperty]?.Trim(valueTrimChars).Split(',');
+                if (values != null)
+                {
+                    if (values.Length == 1)
+                    {
+                        int i = int.Parse(values[0]);
+                        return new Tuple<int, int>(i, i);
+                    }
+                    else if (values.Length == 2)
+                        return new Tuple<int, int>(int.Parse(values[0]), int.Parse(values[1]));
+                }
+            }
+            catch { }
+            return null;
+        }
+
+        public VectorInt3? GetValueAsVectorInt3()
+        {
+            try
+            {
+                string[] values = this.Value?.Trim(valueTrimChars).Split(',');
+                if ((values != null) && (values.Length == 3))
+                    return new VectorInt3(int.Parse(values[0]), int.Parse(values[1]), int.Parse(values[2]));
+            } catch { }
+            return null;
+        }
+
+        public VectorInt3? GetSubpropertyAsVectorInt3(string subproperty)
+        {
+            if (!this.Subproperties.ContainsKey(subproperty)) return null;
+            try
+            {
+                string[] values = this.Subproperties[subproperty]?.Trim(valueTrimChars).Split(',');
+                if ((values != null) && (values.Length == 3))
+                    return new VectorInt3(int.Parse(values[0]), int.Parse(values[1]), int.Parse(values[2]));
+            }
+            catch { }
+            return null;
         }
 
         public string ToLocalizedString(Localization localization)

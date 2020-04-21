@@ -13,11 +13,12 @@ namespace DarkCity.Data
             data.PlanetType = playfield.PlanetType.ToString();
             data.PlanetClass = playfield.PlanetClass.ToString();
             data.IsPvP = playfield.IsPvP;
-            data.Entities = new List<EntityHeader>(playfield.Entities.Count + playfield.Players.Count);
-            foreach (IPlayer player in playfield.Players.Values)
-                data.Entities.Add(EntityHeader(player));
+            data.Entities = new List<EntityHeader>(playfield.Entities.Count);
             foreach (IEntity entity in playfield.Entities.Values)
-                data.Players.Add(EntityHeader(entity));
+                data.Entities.Add(EntityHeader(entity));
+            data.Players = new List<EntityHeader>(playfield.Players.Count);
+            foreach (IPlayer player in playfield.Players.Values)
+                data.Players.Add(EntityHeader(player));
             return data;
         }
 

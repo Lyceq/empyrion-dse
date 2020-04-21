@@ -3,28 +3,34 @@ using System.IO;
 
 namespace DarkCity.Network
 {
-    public class RequestPacket : Packet
+    /// <summary>
+    /// Specification of what a network request is for.
+    /// </summary>
+    public enum RequestSpecification
     {
         /// <summary>
-        /// Specification of what a network request is for.
+        /// Requests the very high-level state of the game. This includes running/not-running, application mode, and local player name.
         /// </summary>
-        public enum RequestSpecification
-        {
-            /// <summary>
-            /// Requests playfield data. Set Specifier to the playfield name. Response will be a <see cref="PlayfieldDataPacket"/>.
-            /// </summary>
-            PlayfieldData = 1,
+        GameState = 1,
 
-            /// <summary>
-            /// Requests the name of the client's playfield. Response will be a <see cref="RequestPacket"/> with same specification and specifier set to the playfield name.
-            /// </summary>
-            ClientPlayfieldName = 2,
+        /// <summary>
+        /// Requests playfield data. Set Specifier to the playfield name. Response will be a <see cref="PlayfieldDataPacket"/>.
+        /// </summary>
+        PlayfieldData = 2,
 
-            /// <summary>
-            /// Requests a height map of a playfield. Response will be a <see cref="PlayfieldMapPacket"/> if the requested playfield is planet or moon type.
-            /// </summary>
-            PlayfieldMap = 3
-        }
+        /// <summary>
+        /// Requests the name of the client's playfield. Response will be a <see cref="RequestPacket"/> with same specification and specifier set to the playfield name.
+        /// </summary>
+        ClientPlayfieldName = 3,
+
+        /// <summary>
+        /// Requests a height map of a playfield. Response will be a <see cref="PlayfieldMapPacket"/> if the requested playfield is planet or moon type.
+        /// </summary>
+        PlayfieldMap = 4
+    }
+
+    public class RequestPacket : Packet
+    {
 
         public override PacketType Type => PacketType.Request;
 

@@ -56,8 +56,8 @@ namespace DarkCity.Simulation
             this.SizeClass = sizeClass;
 
             this.Terrain = new TerrainGenerator();
-            this.Terrain.Width = (int)Math.Pow(2, sizeClass) * 1000;
-            this.Terrain.Height = (int)Math.Pow(2, sizeClass) * 500;
+            this.Terrain.Width = (int)Math.Pow(2, sizeClass) * 2000;
+            this.Terrain.Height = (int)Math.Pow(2, sizeClass) * 1000;
             this.Terrain.Render();
         }
 
@@ -151,6 +151,7 @@ namespace DarkCity.Simulation
             player.Type = EntityType.Player;
             this.Players[player.Id] = player;
             this.AddEntity(player);
+            this.Players[player.Id] = player;
             return player.Id;
         }
 

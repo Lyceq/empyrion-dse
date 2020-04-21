@@ -51,59 +51,27 @@ namespace DarkCity.Configuration
         /// <summary>
         /// Base items are used in the parts list when building a blueprint in the factory. Also used when using a Repair Bay to repair to template.
         /// </summary>
-        public bool BaseItem
-        {
-            get {
-                bool result;
-                if (bool.TryParse(this.ResolveProperty("BaseItem")?.Value, out result))
-                    return result;
-                return false;
-            }
-        }
+        public bool BaseItem => this.ResolveProperty("BaseItem")?.GetValueAsBoolean() ?? false;
 
         /// <summary>
         /// True if the item counts as an Ore item.
         /// </summary>
-        public bool IsOre
-        {
-            get { return ores.Contains(this.Name); }
-        }
+        public bool IsOre => ores.Contains(this.Name);
 
         /// <summary>
         /// True if the item counts as an Ingot item.
         /// </summary>
-        public bool IsIngot
-        {
-            get { return ingots.Contains(this.Name); }
-        }
+        public bool IsIngot => ingots.Contains(this.Name);
 
         /// <summary>
         /// How many items are produced when this template is built.
         /// </summary>
-        public int OutputCount
-        {
-            get
-            {
-                int result;
-                if (int.TryParse(this.ResolveProperty("OutputCount")?.Value, out result))
-                    return result;
-                return 1;
-            }
-        }
+        public int OutputCount => this.ResolveProperty("OutputCount")?.GetValueAsInt32() ?? 1;
 
         /// <summary>
         /// Number of seconds it takes to build this template. This number is multiplied by the constructor factor to calculate the final time.
         /// </summary>
-        public int CraftTime
-        {
-            get
-            {
-                int result;
-                if (int.TryParse(this.ResolveProperty("CraftTime")?.Value, out result))
-                    return result;
-                return 1;
-            }
-        }
+        public int CraftTime => this.ResolveProperty("CraftTime")?.GetValueAsInt32() ?? 1;
 
         /// <summary>
         /// A list of <see cref="Constructor"/> types that are allowed to build this template.
@@ -145,14 +113,7 @@ namespace DarkCity.Configuration
             }
         }
 
-        public DeconstructorOverride DeconstructorOverride
-        {
-            get
-            {
-                return this.ResolveProperty("DeconOverride")?.Value?.ToDeconstructorOverride() ?? DeconstructorOverride.None;
-            }
-        }
-
+        public DeconstructorOverride DeconstructorOverride => this.ResolveProperty("DeconOverride")?.Value?.ToDeconstructorOverride() ?? DeconstructorOverride.None;
 
         public CraftingTemplate(EmpyrionConfiguration configuration)
             : base(configuration) { }

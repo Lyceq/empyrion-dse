@@ -8,22 +8,126 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ClientCompanion.Properties
-{
-
-
+namespace ClientCompanion.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.4.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:00:30")]
+        public global::System.TimeSpan ReconnectDelay {
+            get {
+                return ((global::System.TimeSpan)(this["ReconnectDelay"]));
+            }
+            set {
+                this["ReconnectDelay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MostRecentHost {
+            get {
+                return ((string)(this["MostRecentHost"]));
+            }
+            set {
+                this["MostRecentHost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int MostRecentPort {
+            get {
+                return ((int)(this["MostRecentPort"]));
+            }
+            set {
+                this["MostRecentPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MostRecentRemoteHost {
+            get {
+                return ((string)(this["MostRecentRemoteHost"]));
+            }
+            set {
+                this["MostRecentRemoteHost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MostRecentRemotePort {
+            get {
+                return ((string)(this["MostRecentRemotePort"]));
+            }
+            set {
+                this["MostRecentRemotePort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\Steam\\SteamApps\\common\\Empyrion - Galactic Survival\\Conten" +
+            "t\\Configuration\\Example_Config.ecf")]
+        public string MostRecentExampleFile {
+            get {
+                return ((string)(this["MostRecentExampleFile"]));
+            }
+            set {
+                this["MostRecentExampleFile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection MostRecentCustomFiles {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["MostRecentCustomFiles"]));
+            }
+            set {
+                this["MostRecentCustomFiles"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection MostRecentCustomFilesSelected {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["MostRecentCustomFilesSelected"]));
+            }
+            set {
+                this["MostRecentCustomFilesSelected"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files (x86)\\Steam\\SteamApps\\common\\Empyrion - Galactic Survival\\Conten" +
+            "t\\Extras\\Localization.csv")]
+        public string MostRecentLocalizationFile {
+            get {
+                return ((string)(this["MostRecentLocalizationFile"]));
+            }
+            set {
+                this["MostRecentLocalizationFile"] = value;
             }
         }
     }

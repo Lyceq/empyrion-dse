@@ -28,9 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Playfield Data", "playfield");
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmClientCompanion));
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.mainFile = new System.Windows.Forms.ToolStripMenuItem();
             this.mainFileConnectLocal = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,32 +38,38 @@
             this.mainFileOpenLocalization = new System.Windows.Forms.ToolStripMenuItem();
             this.mainFileSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.mainFileExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.mainLayout = new System.Windows.Forms.ToolStripMenuItem();
-            this.mainLayout1Tile = new System.Windows.Forms.ToolStripMenuItem();
-            this.mainLayout2x1Tiles = new System.Windows.Forms.ToolStripMenuItem();
-            this.mainLayout2x2Tiles = new System.Windows.Forms.ToolStripMenuItem();
             this.mainLanguage = new System.Windows.Forms.ToolStripMenuItem();
             this.mainLanguageLocalizationNotLoaded = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainWindow = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainWindowFullscreen = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainWindowSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.mainWindowLayouts = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainWindowTiles = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainWindowSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.mainWindowSaveLayout = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainWindowLoadLayout = new System.Windows.Forms.ToolStripMenuItem();
+            this.switchLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainWindowLayoutsNoSaved = new System.Windows.Forms.ToolStripMenuItem();
             this.mainHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.mainHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelTiles = new System.Windows.Forms.TableLayoutPanel();
-            this.StatusStrip = new System.Windows.Forms.StatusStrip();
+            this.statusMain = new System.Windows.Forms.StatusStrip();
             this.statusConnection = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusPlayerName = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusPlayfield = new System.Windows.Forms.ToolStripStatusLabel();
-            this.listTiles = new System.Windows.Forms.ListView();
-            this.imagesTiles = new System.Windows.Forms.ImageList(this.components);
-            this.timerRequestData = new System.Windows.Forms.Timer(this.components);
+            this.statusGameState = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusApplicationMode = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusLocalPlayer = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusClientPlayfield = new System.Windows.Forms.ToolStripStatusLabel();
+            this.openLocalizationFile = new System.Windows.Forms.OpenFileDialog();
+            this.tileLayout = new ClientCompanion.TileLayout();
             this.menuMain.SuspendLayout();
-            this.StatusStrip.SuspendLayout();
+            this.statusMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuMain
             // 
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mainFile,
-            this.mainLayout,
             this.mainLanguage,
+            this.mainWindow,
             this.mainHelp});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
@@ -142,37 +145,6 @@
             this.mainFileExit.Text = "E&xit";
             this.mainFileExit.Click += new System.EventHandler(this.mainFileExit_Click);
             // 
-            // mainLayout
-            // 
-            this.mainLayout.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mainLayout1Tile,
-            this.mainLayout2x1Tiles,
-            this.mainLayout2x2Tiles});
-            this.mainLayout.Name = "mainLayout";
-            this.mainLayout.Size = new System.Drawing.Size(52, 20);
-            this.mainLayout.Text = "&Layout";
-            // 
-            // mainLayout1Tile
-            // 
-            this.mainLayout1Tile.Name = "mainLayout1Tile";
-            this.mainLayout1Tile.Size = new System.Drawing.Size(122, 22);
-            this.mainLayout1Tile.Text = "1 Tile";
-            this.mainLayout1Tile.Click += new System.EventHandler(this.mainLayout1Tile_Click);
-            // 
-            // mainLayout2x1Tiles
-            // 
-            this.mainLayout2x1Tiles.Name = "mainLayout2x1Tiles";
-            this.mainLayout2x1Tiles.Size = new System.Drawing.Size(122, 22);
-            this.mainLayout2x1Tiles.Text = "2 x 1 Tiles";
-            this.mainLayout2x1Tiles.Click += new System.EventHandler(this.mainLayout2x1Tiles_Click);
-            // 
-            // mainLayout2x2Tiles
-            // 
-            this.mainLayout2x2Tiles.Name = "mainLayout2x2Tiles";
-            this.mainLayout2x2Tiles.Size = new System.Drawing.Size(122, 22);
-            this.mainLayout2x2Tiles.Text = "2 x 2 Tiles";
-            this.mainLayout2x2Tiles.Click += new System.EventHandler(this.mainLayout2x2Tiles_Click);
-            // 
             // mainLanguage
             // 
             this.mainLanguage.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -188,6 +160,83 @@
             this.mainLanguageLocalizationNotLoaded.Size = new System.Drawing.Size(183, 22);
             this.mainLanguageLocalizationNotLoaded.Text = "Localization not loaded";
             // 
+            // mainWindow
+            // 
+            this.mainWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mainWindowFullscreen,
+            this.mainWindowSeparator1,
+            this.mainWindowLayouts,
+            this.mainWindowTiles,
+            this.mainWindowSeparator2,
+            this.mainWindowSaveLayout,
+            this.mainWindowLoadLayout,
+            this.switchLayoutToolStripMenuItem});
+            this.mainWindow.Name = "mainWindow";
+            this.mainWindow.Size = new System.Drawing.Size(57, 20);
+            this.mainWindow.Text = "&Window";
+            // 
+            // mainWindowFullscreen
+            // 
+            this.mainWindowFullscreen.Name = "mainWindowFullscreen";
+            this.mainWindowFullscreen.ShortcutKeyDisplayString = "F11";
+            this.mainWindowFullscreen.Size = new System.Drawing.Size(147, 22);
+            this.mainWindowFullscreen.Text = "&Fullscreen";
+            this.mainWindowFullscreen.Click += new System.EventHandler(this.mainWindowFullscreen_Click);
+            // 
+            // mainWindowSeparator1
+            // 
+            this.mainWindowSeparator1.Name = "mainWindowSeparator1";
+            this.mainWindowSeparator1.Size = new System.Drawing.Size(144, 6);
+            // 
+            // mainWindowLayouts
+            // 
+            this.mainWindowLayouts.Name = "mainWindowLayouts";
+            this.mainWindowLayouts.Size = new System.Drawing.Size(147, 22);
+            this.mainWindowLayouts.Text = "&Layouts";
+            this.mainWindowLayouts.Click += new System.EventHandler(this.mainWindowLayouts_Click);
+            // 
+            // mainWindowTiles
+            // 
+            this.mainWindowTiles.Name = "mainWindowTiles";
+            this.mainWindowTiles.Size = new System.Drawing.Size(147, 22);
+            this.mainWindowTiles.Text = "&Tiles";
+            this.mainWindowTiles.Click += new System.EventHandler(this.mainWindowTiles_Click);
+            // 
+            // mainWindowSeparator2
+            // 
+            this.mainWindowSeparator2.Name = "mainWindowSeparator2";
+            this.mainWindowSeparator2.Size = new System.Drawing.Size(144, 6);
+            // 
+            // mainWindowSaveLayout
+            // 
+            this.mainWindowSaveLayout.Name = "mainWindowSaveLayout";
+            this.mainWindowSaveLayout.Size = new System.Drawing.Size(147, 22);
+            this.mainWindowSaveLayout.Text = "Save Layout...";
+            this.mainWindowSaveLayout.Click += new System.EventHandler(this.mainWindowSaveLayout_Click);
+            // 
+            // mainWindowLoadLayout
+            // 
+            this.mainWindowLoadLayout.Name = "mainWindowLoadLayout";
+            this.mainWindowLoadLayout.Size = new System.Drawing.Size(147, 22);
+            this.mainWindowLoadLayout.Text = "Load Layout...";
+            this.mainWindowLoadLayout.Click += new System.EventHandler(this.mainWindowLoadLayout_Click);
+            // 
+            // switchLayoutToolStripMenuItem
+            // 
+            this.switchLayoutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mainWindowLayoutsNoSaved});
+            this.switchLayoutToolStripMenuItem.Name = "switchLayoutToolStripMenuItem";
+            this.switchLayoutToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.switchLayoutToolStripMenuItem.Text = "S&witch Layout";
+            // 
+            // mainWindowLayoutsNoSaved
+            // 
+            this.mainWindowLayoutsNoSaved.Enabled = false;
+            this.mainWindowLayoutsNoSaved.Name = "mainWindowLayoutsNoSaved";
+            this.mainWindowLayoutsNoSaved.Size = new System.Drawing.Size(161, 22);
+            this.mainWindowLayoutsNoSaved.Text = "No Layouts Saved";
+            this.mainWindowLayoutsNoSaved.Click += new System.EventHandler(this.mainWindowLayoutsSaved_Click);
+            // 
             // mainHelp
             // 
             this.mainHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -201,102 +250,129 @@
             this.mainHelpAbout.Name = "mainHelpAbout";
             this.mainHelpAbout.Size = new System.Drawing.Size(115, 22);
             this.mainHelpAbout.Text = "&About...";
-            this.mainHelpAbout.Click += new System.EventHandler(this.mainHelpAbout_Click);
             // 
-            // panelTiles
+            // statusMain
             // 
-            this.panelTiles.ColumnCount = 1;
-            this.panelTiles.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panelTiles.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.panelTiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelTiles.Location = new System.Drawing.Point(174, 24);
-            this.panelTiles.Name = "panelTiles";
-            this.panelTiles.RowCount = 1;
-            this.panelTiles.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panelTiles.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 404F));
-            this.panelTiles.Size = new System.Drawing.Size(626, 404);
-            this.panelTiles.TabIndex = 1;
-            // 
-            // StatusStrip
-            // 
-            this.StatusStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
-            this.StatusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusMain.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
+            this.statusMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusConnection,
-            this.statusPlayerName,
-            this.statusPlayfield});
-            this.StatusStrip.Location = new System.Drawing.Point(0, 428);
-            this.StatusStrip.Name = "StatusStrip";
-            this.StatusStrip.ShowItemToolTips = true;
-            this.StatusStrip.Size = new System.Drawing.Size(800, 22);
-            this.StatusStrip.TabIndex = 2;
-            this.StatusStrip.Text = "Companion Status";
+            this.statusGameState,
+            this.statusApplicationMode,
+            this.statusLocalPlayer,
+            this.statusClientPlayfield});
+            this.statusMain.Location = new System.Drawing.Point(0, 424);
+            this.statusMain.Name = "statusMain";
+            this.statusMain.ShowItemToolTips = true;
+            this.statusMain.Size = new System.Drawing.Size(800, 26);
+            this.statusMain.SizingGrip = false;
+            this.statusMain.TabIndex = 2;
+            this.statusMain.Text = "Companion Status";
             // 
             // statusConnection
             // 
+            this.statusConnection.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.statusConnection.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
             this.statusConnection.Name = "statusConnection";
-            this.statusConnection.Size = new System.Drawing.Size(71, 17);
+            this.statusConnection.Padding = new System.Windows.Forms.Padding(2);
+            this.statusConnection.Size = new System.Drawing.Size(461, 21);
+            this.statusConnection.Spring = true;
             this.statusConnection.Text = "Disconnected";
+            this.statusConnection.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.statusConnection.ToolTipText = "State of the connection to an Empyrion game running the Dark City Extensions.";
             // 
-            // statusPlayerName
+            // statusGameState
             // 
-            this.statusPlayerName.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
-            this.statusPlayerName.Name = "statusPlayerName";
-            this.statusPlayerName.Size = new System.Drawing.Size(91, 17);
-            this.statusPlayerName.Text = "No Player Loaded";
+            this.statusGameState.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.statusGameState.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
+            this.statusGameState.Name = "statusGameState";
+            this.statusGameState.Padding = new System.Windows.Forms.Padding(2);
+            this.statusGameState.Size = new System.Drawing.Size(71, 21);
+            this.statusGameState.Text = "Game State";
+            this.statusGameState.ToolTipText = "State of the Empyrion game. Usually NotRunning or Running.";
             // 
-            // statusPlayfield
+            // statusApplicationMode
             // 
-            this.statusPlayfield.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
-            this.statusPlayfield.Name = "statusPlayfield";
-            this.statusPlayfield.Size = new System.Drawing.Size(101, 17);
-            this.statusPlayfield.Text = "No Playfield Loaded";
+            this.statusApplicationMode.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.statusApplicationMode.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
+            this.statusApplicationMode.Name = "statusApplicationMode";
+            this.statusApplicationMode.Padding = new System.Windows.Forms.Padding(2);
+            this.statusApplicationMode.Size = new System.Drawing.Size(96, 21);
+            this.statusApplicationMode.Text = "Application Mode";
+            this.statusApplicationMode.ToolTipText = "Application mode that Empyrion is running in. Usually SinglePlayer or Client.";
             // 
-            // listTiles
+            // statusLocalPlayer
             // 
-            this.listTiles.Dock = System.Windows.Forms.DockStyle.Left;
-            listViewItem2.ToolTipText = "Displays information about the player\'s current playfield.";
-            this.listTiles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
-            this.listTiles.LargeImageList = this.imagesTiles;
-            this.listTiles.Location = new System.Drawing.Point(0, 24);
-            this.listTiles.MultiSelect = false;
-            this.listTiles.Name = "listTiles";
-            this.listTiles.ShowItemToolTips = true;
-            this.listTiles.Size = new System.Drawing.Size(174, 404);
-            this.listTiles.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.listTiles.TabIndex = 0;
-            this.listTiles.UseCompatibleStateImageBehavior = false;
+            this.statusLocalPlayer.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.statusLocalPlayer.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
+            this.statusLocalPlayer.Name = "statusLocalPlayer";
+            this.statusLocalPlayer.Padding = new System.Windows.Forms.Padding(2);
+            this.statusLocalPlayer.Size = new System.Drawing.Size(72, 21);
+            this.statusLocalPlayer.Text = "Local Player";
+            this.statusLocalPlayer.ToolTipText = "Name of the local player that is logged into the Empyrion game.";
             // 
-            // imagesTiles
+            // statusClientPlayfield
             // 
-            this.imagesTiles.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imagesTiles.ImageStream")));
-            this.imagesTiles.TransparentColor = System.Drawing.Color.Transparent;
-            this.imagesTiles.Images.SetKeyName(0, "playfield");
+            this.statusClientPlayfield.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.statusClientPlayfield.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
+            this.statusClientPlayfield.Name = "statusClientPlayfield";
+            this.statusClientPlayfield.Padding = new System.Windows.Forms.Padding(2);
+            this.statusClientPlayfield.Size = new System.Drawing.Size(85, 21);
+            this.statusClientPlayfield.Text = "Client Playfield";
+            this.statusClientPlayfield.ToolTipText = "Name of the playfield that Empyrion is currently running as a client.";
             // 
-            // timerRequestData
+            // openLocalizationFile
             // 
-            this.timerRequestData.Enabled = true;
-            this.timerRequestData.Interval = 2000;
-            this.timerRequestData.Tick += new System.EventHandler(this.timerRequestData_Tick);
+            this.openLocalizationFile.DefaultExt = "csv";
+            this.openLocalizationFile.FileName = "Localization.csv";
+            this.openLocalizationFile.Filter = "CSV Files|*.csv|All Files|*.*";
+            this.openLocalizationFile.InitialDirectory = "%PROGRAMFILES%\\Steam\\SteamApps\\common\\Empyrion - Galactic Survival\\Content\\Extras" +
+    "";
+            this.openLocalizationFile.RestoreDirectory = true;
+            this.openLocalizationFile.ShowReadOnly = true;
+            this.openLocalizationFile.Title = "Open Empyrion Localization File";
+            // 
+            // tileLayout
+            // 
+            this.tileLayout.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
+            this.tileLayout.ColumnCount = 1;
+            this.tileLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tileLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tileLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tileLayout.Location = new System.Drawing.Point(0, 24);
+            this.tileLayout.Name = "tileLayout";
+            this.tileLayout.RowCount = 1;
+            this.tileLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tileLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 399F));
+            this.tileLayout.Size = new System.Drawing.Size(800, 400);
+            this.tileLayout.TabIndex = 3;
             // 
             // frmClientCompanion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.panelTiles);
-            this.Controls.Add(this.listTiles);
-            this.Controls.Add(this.StatusStrip);
+            this.Controls.Add(this.tileLayout);
+            this.Controls.Add(this.statusMain);
             this.Controls.Add(this.menuMain);
             this.MainMenuStrip = this.menuMain;
             this.Name = "frmClientCompanion";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Empyrion Client Companion";
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
-            this.StatusStrip.ResumeLayout(false);
-            this.StatusStrip.PerformLayout();
+            this.statusMain.ResumeLayout(false);
+            this.statusMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -306,13 +382,11 @@
 
         private System.Windows.Forms.MenuStrip menuMain;
         private System.Windows.Forms.ToolStripMenuItem mainFile;
-        private System.Windows.Forms.ToolStripMenuItem mainLayout;
         private System.Windows.Forms.ToolStripMenuItem mainHelp;
-        private System.Windows.Forms.TableLayoutPanel panelTiles;
-        private System.Windows.Forms.StatusStrip StatusStrip;
+        private System.Windows.Forms.StatusStrip statusMain;
         private System.Windows.Forms.ToolStripStatusLabel statusConnection;
-        private System.Windows.Forms.ToolStripStatusLabel statusPlayerName;
-        private System.Windows.Forms.ToolStripStatusLabel statusPlayfield;
+        private System.Windows.Forms.ToolStripStatusLabel statusLocalPlayer;
+        private System.Windows.Forms.ToolStripStatusLabel statusApplicationMode;
         private System.Windows.Forms.ToolStripMenuItem mainFileConnectLocal;
         private System.Windows.Forms.ToolStripMenuItem mainFileConnectRemote;
         private System.Windows.Forms.ToolStripSeparator mainFileSeparator1;
@@ -320,16 +394,24 @@
         private System.Windows.Forms.ToolStripMenuItem mainFileOpenLocalization;
         private System.Windows.Forms.ToolStripSeparator mainFileSeparator2;
         private System.Windows.Forms.ToolStripMenuItem mainFileExit;
-        private System.Windows.Forms.ToolStripMenuItem mainLayout1Tile;
-        private System.Windows.Forms.ToolStripMenuItem mainLayout2x1Tiles;
-        private System.Windows.Forms.ToolStripMenuItem mainLayout2x2Tiles;
         private System.Windows.Forms.ToolStripMenuItem mainLanguage;
         private System.Windows.Forms.ToolStripMenuItem mainLanguageLocalizationNotLoaded;
         private System.Windows.Forms.ToolStripMenuItem mainHelpAbout;
-        private System.Windows.Forms.ListView listTiles;
-        private System.Windows.Forms.ImageList imagesTiles;
         private System.Windows.Forms.ToolStripMenuItem mainFileDisconnect;
-        private System.Windows.Forms.Timer timerRequestData;
+        private System.Windows.Forms.ToolStripStatusLabel statusClientPlayfield;
+        private System.Windows.Forms.ToolStripStatusLabel statusGameState;
+        private System.Windows.Forms.OpenFileDialog openLocalizationFile;
+        private System.Windows.Forms.ToolStripMenuItem mainWindow;
+        private System.Windows.Forms.ToolStripMenuItem mainWindowFullscreen;
+        private System.Windows.Forms.ToolStripSeparator mainWindowSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem mainWindowLayouts;
+        private System.Windows.Forms.ToolStripMenuItem mainWindowTiles;
+        private System.Windows.Forms.ToolStripSeparator mainWindowSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem mainWindowSaveLayout;
+        private System.Windows.Forms.ToolStripMenuItem mainWindowLoadLayout;
+        private TileLayout tileLayout;
+        private System.Windows.Forms.ToolStripMenuItem switchLayoutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mainWindowLayoutsNoSaved;
     }
 }
 

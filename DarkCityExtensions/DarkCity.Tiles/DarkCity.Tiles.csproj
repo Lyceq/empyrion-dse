@@ -85,6 +85,9 @@
     <EmbeddedResource Include="PlayfieldDataTile.resx">
       <DependentUpon>PlayfieldDataTile.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Tile.resx">
+      <DependentUpon>Tile.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DarkCityCore\DarkCityCore.csproj">

@@ -31,6 +31,7 @@ namespace DarkCity.Network
                 case PacketType.Event: break;
                 case PacketType.PlayfieldData: packet = new PlayfieldDataPacket(); break;
                 case PacketType.PlayfieldMap: packet = new PlayfieldMapPacket(); break;
+                case PacketType.EmpyrionState: packet = new EmpyrionStatePacket(); break;
                 default: throw new Exception("Invalid packet type received.");
             }
 

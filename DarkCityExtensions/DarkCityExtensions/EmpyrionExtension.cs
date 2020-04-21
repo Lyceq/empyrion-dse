@@ -56,42 +56,12 @@ namespace DarkCity
 		/// </summary>
 		public Dictionary<string, PlayfieldProcessor> PlayfieldProcessors = new Dictionary<string, PlayfieldProcessor>();
 
-		public static bool LiveLcd { get; private set; } = false;
+		public static bool LiveLcd { get; private set; } = true;
 
 		/// <summary>
 		/// Normally instanced by Empyrion when it wants to load the mod. Which Empyrion processed load the mod is controlled in DarkCityExtensions_Info.yaml
 		/// </summary>
 		public EmpyrionExtension() { Instance = this; }
-
-        #region "Initialization Methods"
-
-		private void InitializeDedicatedServer()
-		{
-			Log.Info("Initializing for dedicated server mode.");
-		}
-
-		private void InitializePlayfieldServer()
-		{
-			Log.Info("Initializing for playfield server mode.");
-
-			LiveLcd = true;
-		}
-
-		private void InitializeClient()
-		{
-			Log.Info("Initializing for client mode.");
-
-			//LiveLcd = true;
-		}
-
-		private void InitializeSinglePlayer()
-		{
-			Log.Info("Initializing for single player mode.");
-
-			LiveLcd = true;
-		}
-
-        #endregion
 
         #region "IMod Methods"
 
@@ -111,7 +81,7 @@ namespace DarkCity
 				try
 				{
 					this.NetworkServerHost = new ModServerHost();
-					this.NetworkServerHost.Server.BindEndPoints.Add(new IPEndPoint(IPAddress.Loopback, 0x0dce));
+					this.NetworkServerHost.Server.BindEndPoints.Add(new IPEndPoint(IPAddress.Loopback, Connection.DefaultPort));
 					this.NetworkServerHost.Server.Start();
 				} catch (Exception ex)
 				{
@@ -121,9 +91,7 @@ namespace DarkCity
 			}
 
 			if (this.GameStateProcessor == null)
-			{
 				this.GameStateProcessor = new GameStateProcessor();
-			}
 
 			Application.OnPlayfieldLoaded += Application_OnPlayfieldLoaded;
 			Application.OnPlayfieldUnloading += Application_OnPlayfieldUnloading;
@@ -159,20 +127,6 @@ namespace DarkCity
 				Log.Warn($"Failed to load configuration files from {contentPath}. {ex.Message}");
 			}
 
-			try
-			{
-				switch (Application.Mode)
-				{
-					case ApplicationMode.Client: this.InitializeClient(); break;
-					case ApplicationMode.DedicatedServer: this.InitializeDedicatedServer(); break;
-					case ApplicationMode.PlayfieldServer: this.InitializePlayfieldServer(); break;
-					case ApplicationMode.SinglePlayer: this.InitializeSinglePlayer(); break;
-				}
-			} catch (Exception ex)
-			{
-				Log.Warn($"Failed to initialize for {Application.Mode} mode. Some features of DCE may be impacted. Reason: {ex.Message}");
-			}
-
 			Log.Info("Dark City server extension initialization done.");
 		}
 
@@ -202,7 +156,7 @@ namespace DarkCity
 				this.GameStateProcessor.Stop();
 				this.GameStateProcessor = null;
 			}
-
+			
 			if (this.NetworkServerHost != null)
 			{
 				this.NetworkServerHost.Server.Stop();
@@ -227,7 +181,7 @@ namespace DarkCity
 			if (this.NetworkServerHost == null)
 			{
 				this.NetworkServerHost = new ModServerHost();
-				this.NetworkServerHost.Server.BindEndPoints.Add(new IPEndPoint(IPAddress.Loopback, 0x0dce));
+				this.NetworkServerHost.Server.BindEndPoints.Add(new IPEndPoint(IPAddress.Loopback, Connection.DefaultPort));
 				this.NetworkServerHost.Server.Start();
 			}
 

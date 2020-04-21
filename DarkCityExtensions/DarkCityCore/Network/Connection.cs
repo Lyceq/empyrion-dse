@@ -10,6 +10,8 @@ namespace DarkCity.Network
 
     public class Connection
     {
+        public const int DefaultPort = 0x0dce;
+
         public event ConnectionDelegate ConnectionClosed;
         public event PacketDelegate PacketReceived;
         public event PacketDelegate PacketSent;

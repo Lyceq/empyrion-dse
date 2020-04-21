@@ -1,9 +1,9 @@
 ﻿using Eleon.Modding;
+using DarkCity.Configuration;
 using DarkCity.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DarkCity.Tokenizers
 {
@@ -61,49 +61,72 @@ namespace DarkCity.Tokenizers
                 this.TokenizeSignalList(signals);
 
                 // Get a manifest of all items in the structure.
-                //ItemManifest manifest = new ItemManifest();
-                //manifest.Add(this.Structure);
+                ItemManifest manifest = new ItemManifest();
+                manifest.Add(this.Structure);
 
                 if (EmpyrionExtension.Configuration != null)
                 {
                     // Buckets of item totals, each will get their own tag.
                     Dictionary<string, int> allItems = new Dictionary<string, int>();
-                    //Dictionary<string, int> ammoItems = new Dictionary<string, int>();
-                    //Dictionary<string, int> foodItems = new Dictionary<string, int>();
-                    //Dictionary<string, int> oreItems = new Dictionary<string, int>();
-                    //Dictionary<string, int> ingotItems = new Dictionary<string, int>();
-                    //foreach (KeyValuePair<int, int> count in manifest.GetItemTotals())
-                    //{
-                    //    if (DarkCity.Configuration.ObjectsByID.ContainsKey(count.Key))
-                    //    {
-                    //        allItems[DarkCity.Configuration.ObjectsByID[count.Key].Name] = count.Value;
-                    //    }
-                    //    else
-                    //    {
-                    //        DarkCity.LogDebug("Encountered block with unknown ID " + count.Key);
-                    //        allItems[count.Key.ToString()] = count.Value;
-                    //    }
-                    //}
 
-                    this.TokenizeInventoryCount(allItems, "InventoryAll");
+                    // Key is the name of the category. Value is the item->count lookup.
+                    Dictionary<string, SortedDictionary<string, int>> categories = new Dictionary<string, SortedDictionary<string, int>>();
+
+                    EmpyrionObject obj;
+                    string category, name;
+                    SortedDictionary<string, int> categoryList;
+                    foreach (KeyValuePair<int, int> count in manifest.Items)
+                    {
+                        if (EmpyrionExtension.Configuration.ObjectsByID.ContainsKey(count.Key))
+                        {
+                            obj = EmpyrionExtension.Configuration.ObjectsByID[count.Key];
+                            name = obj?.Name ?? count.Key.ToString();
+                            allItems[name] = count.Value;
+                            category = obj?.ResolveProperty("Category")?.Value;
+                            if (category != null)
+                            {
+                                if (categories.ContainsKey(category))
+                                {
+                                    categoryList = categories[category];
+                                }
+                                else
+                                {
+                                    categoryList = new SortedDictionary<string, int>();
+                                    categories[category] = categoryList;
+                                }
+
+                                if (categoryList.ContainsKey(name))
+                                    categoryList[name] += count.Value;
+                                else
+                                    categoryList[name] = count.Value;
+                            }
+                        }
+                        else
+                        {
+                            Log.Debug("Encountered block with unknown ID " + count.Key);
+                            allItems[count.Key.ToString()] = count.Value;
+                        }
+                    }
+
+                    this.tokens["InventoryAll"] = string.Join(Environment.NewLine, allItems.Select(kvp => $"{EmpyrionExtension.Localization?[kvp.Key] ?? kvp.Key}: {kvp.Value}"));
+                    foreach (KeyValuePair<string, SortedDictionary<string, int>> kvp in categories)
+                        this.tokens["Inventory-" + kvp.Key] = string.Join(Environment.NewLine, kvp.Value.Select(item => $"{EmpyrionExtension.Localization?[item.Key] ?? item.Key}: {item.Value}"));
                 } else { Log.Debug("Configuration is null."); }
             }
         }
 
-        private void TokenizeInventoryCount(Dictionary<string, int> inventory, string key)
+        private string CreateSortedList<T>(List<T> list, Func<T, string> selector)
         {
-            StringBuilder result = new StringBuilder();
-            if (EmpyrionExtension.Localization == null)
+            if (list == null) return null;
+            SortedList<string, object> result = new SortedList<string, object>(list.Count, StringComparer.InvariantCultureIgnoreCase);
+            string line;
+            foreach (T item in list)
             {
-                Log.Debug("TokenizeInventoryCount cannot use localization.");
-                foreach (KeyValuePair<string, int> item in inventory)
-                    result.AppendLine($"{item.Key}: {item.Value}");
-            } else
-            {
-                foreach (KeyValuePair<string, int> item in inventory)
-                    result.AppendLine($"{EmpyrionExtension.Localization[item.Key] ?? item.Key}: {item.Value}");
+                line = selector(item);
+                if (!string.IsNullOrEmpty(line)) result.Add(line, null);
             }
-            this.tokens[key] = result.ToString();
+
+            return string.Join(Environment.NewLine, result);
         }
 
         /// <summary>
@@ -125,14 +148,7 @@ namespace DarkCity.Tokenizers
         /// <param name="key">The key to use for the name of the token.</param>
         private void TokenizeStructureList(List<IStructure> structures, string key)
         {
-            StringBuilder result = new StringBuilder();
-            foreach (IStructure structure in structures)
-            {
-                result.Append(structure?.Entity?.Name ?? "Unknown");
-                result.Append(Environment.NewLine);
-            }
-
-            this.tokens[key] = result.ToString().Trim();
+            this.tokens[key] = this.CreateSortedList<IStructure>(structures, s => s?.Entity?.Name);
         }
 
         /// <summary>
@@ -142,14 +158,7 @@ namespace DarkCity.Tokenizers
         /// <param name="key">The key to use for the name of the token.</param>
         private void TokenizePlayerList(List<IPlayer> players, string key)
         {
-            StringBuilder result = new StringBuilder();
-            foreach (IPlayer player in players)
-            {
-                result.Append(player?.Name ?? "Unknown");
-                result.Append(Environment.NewLine);
-            }
-
-            this.tokens[key] = result.ToString().Trim();
+            this.tokens[key] = this.CreateSortedList<IPlayer>(players, p => p?.Name);
         }
 
         /// <summary>
@@ -159,10 +168,10 @@ namespace DarkCity.Tokenizers
         /// <param name="signals">A list of SenderSignal instances. These normally come from the IStructure method GetControlPanelSignals, GetBlockSignals, or both.</param>
         private void TokenizeSignalList(List<SenderSignal> signals)
         {
-            StringBuilder signalList = new StringBuilder();
-            StringBuilder activeSignalList = new StringBuilder();
+            SortedList<string, object> allSignals = new SortedList<string, object>(signals.Count, StringComparer.InvariantCultureIgnoreCase);
+            SortedList<string, object> activeSignals = new SortedList<string, object>(StringComparer.InvariantCultureIgnoreCase);
+            SortedList<string, object> inactiveSignals = new SortedList<string, object>(StringComparer.InvariantCultureIgnoreCase);
             int activeSignalCount = 0;
-            StringBuilder inactiveSignalList = new StringBuilder();
             int inactiveSignalCount = 0;
 
             this.tokens["SignalCount"] = signals.Count.ToString();
@@ -170,23 +179,22 @@ namespace DarkCity.Tokenizers
             {
                 bool state = this.Structure.GetSignalState(signal.Name);
                 this.tokens["Signal-" + signal.Name] = state ? "On" : "Off";
+                allSignals.Add(signal.Name, null);
                 if (state)
                 {
-                    activeSignalList.Append(signal.Name);
-                    activeSignalList.Append(Environment.NewLine);
+                    activeSignals.Add(signal.Name, null);
                     activeSignalCount++;
                 } else
                 {
-                    inactiveSignalList.Append(signal.Name);
-                    inactiveSignalList.Append(Environment.NewLine);
+                    inactiveSignals.Add(signal.Name, null);
                     inactiveSignalCount++;
                 }
             }
-           
 
-            this.tokens["ActiveSignalList"] = activeSignalList.ToString();
+            this.tokens["SignalList"] = string.Join(Environment.NewLine, allSignals.Keys);
+            this.tokens["ActiveSignalList"] = string.Join(Environment.NewLine, activeSignals.Keys);
             this.tokens["ActiveSignalCount"] = activeSignalCount.ToString();
-            this.tokens["InactiveSignalList"] = inactiveSignalList.ToString();
+            this.tokens["InactiveSignalList"] = string.Join(Environment.NewLine, inactiveSignals.Keys);
             this.tokens["InactiveSignalCount"] = inactiveSignalCount.ToString();
         }
     }

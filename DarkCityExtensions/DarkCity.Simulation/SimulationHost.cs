@@ -70,6 +70,8 @@ namespace DarkCity.Simulation
             PlayfieldSimulator playfield = this.IApplication.CreatePlayfield("Planet", "Temperate", 1);
             playfield.GeneratePoIs(30);
 
+            this.IApplication.LocalPlayer = playfield.Players[playfield.SpawnTestPlayer(UnityEngine.Vector3.zero)];
+
             this.IModApi = new ModApiSimulator();
             this.IModApi.Application = this.IApplication;
             this.IModApi.ClientPlayfield = playfield;

@@ -22,26 +22,36 @@ namespace DarkCity.Network
         {
             switch (packet.Specification)
             {
-                case RequestPacket.RequestSpecification.ClientPlayfieldName:
+                case RequestSpecification.GameState:
+                    connection.Send(EmpyrionExtension.Instance.GameStateProcessor.GetCurrentState());
+                    break;
+
+                case RequestSpecification.ClientPlayfieldName:
                     string name = EmpyrionExtension.EmpyrionApi?.ClientPlayfield?.Name;
                     if (!string.IsNullOrWhiteSpace(name))
-                        connection.Send(new RequestPacket(RequestPacket.RequestSpecification.ClientPlayfieldName, name));
+                        connection.Send(new RequestPacket(RequestSpecification.ClientPlayfieldName, name));
                     break;
 
-                case RequestPacket.RequestSpecification.PlayfieldData:
-                    IPlayfield playfield = EmpyrionExtension.Instance?.PlayfieldProcessors?[packet.Specifier]?.Playfield;
-                    if (playfield != null)
-                        connection.Send(new PlayfieldDataPacket(DataFactory.PlayfieldData(playfield)));
-                    break;
-
-                case RequestPacket.RequestSpecification.PlayfieldMap:
-                    PlayfieldProcessor processor = EmpyrionExtension.Instance?.PlayfieldProcessors?[packet.Specifier];
-                    if (processor != null)
+                case RequestSpecification.PlayfieldData:
+                    if (EmpyrionExtension.Instance?.PlayfieldProcessors?.ContainsKey(packet.Specifier) ?? false)
                     {
-                        if (processor.PlayfieldMap == null)
-                            processor.WhenMapReady(map => connection.Send(new PlayfieldMapPacket(map)));
-                        else
-                            connection.Send(new PlayfieldMapPacket(processor.PlayfieldMap));
+                        IPlayfield playfield = EmpyrionExtension.Instance?.PlayfieldProcessors?[packet.Specifier]?.Playfield;
+                        if (playfield != null)
+                            connection.Send(new PlayfieldDataPacket(DataFactory.PlayfieldData(playfield)));
+                    }
+                    break;
+
+                case RequestSpecification.PlayfieldMap:
+                    if (EmpyrionExtension.Instance?.PlayfieldProcessors?.ContainsKey(packet.Specifier) ?? false)
+                    {
+                        PlayfieldProcessor processor = EmpyrionExtension.Instance?.PlayfieldProcessors?[packet.Specifier];
+                        if (processor != null)
+                        {
+                            if (processor.PlayfieldMap == null)
+                                processor.WhenMapReady(map => connection.Send(new PlayfieldMapPacket(map)));
+                            else
+                                connection.Send(new PlayfieldMapPacket(processor.PlayfieldMap));
+                        }
                     }
                     break;
                         

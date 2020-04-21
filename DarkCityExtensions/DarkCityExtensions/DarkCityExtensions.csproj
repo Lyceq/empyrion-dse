@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DataExtensions.cs" />
+    <Compile Include="Data\ItemManifest.cs" />
     <Compile Include="GameStateProcessor.cs" />
     <Compile Include="Network\ModServerHost.cs" />
     <Compile Include="ServerApi.cs" />

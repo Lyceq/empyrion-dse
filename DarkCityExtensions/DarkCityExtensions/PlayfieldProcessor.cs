@@ -129,7 +129,8 @@ namespace DarkCity
 			{
 				//DarkCity.LogDebug($"Processing structure {structure.Entity.Name}");
 
-				if (EmpyrionExtension.LiveLcd)
+				if (EmpyrionExtension.LiveLcd && 
+					((EmpyrionExtension.Application.Mode == ApplicationMode.PlayfieldServer) || (EmpyrionExtension.Application.Mode == ApplicationMode.SinglePlayer)))
 				{
 					// Process LCD devices.
 					IDevicePosList list = structure.GetDevices(DeviceTypeName.LCD);
@@ -137,7 +138,7 @@ namespace DarkCity
 					{
 						for (int i = 0; i < list.Count; i++)
 						{
-							VectorInt3 position = list.GetAt(i);
+							Eleon.Modding.VectorInt3 position = list.GetAt(i);
 							ILcd lcd = structure.GetDevice<ILcd>(position);
 							if (lcd != null)
 							{

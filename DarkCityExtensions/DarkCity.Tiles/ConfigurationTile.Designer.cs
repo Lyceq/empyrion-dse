@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigurationTile));
             this.splitConfiguration = new System.Windows.Forms.SplitContainer();
             this.treeEmpyrionObjects = new System.Windows.Forms.TreeView();
@@ -37,7 +36,7 @@
             this.lblObjectRaw = new System.Windows.Forms.Label();
             this.txtResolvedObject = new System.Windows.Forms.TextBox();
             this.lblResolvedObject = new System.Windows.Forms.Label();
-            this.imagesConfigurationObjects = new System.Windows.Forms.ImageList(this.components);
+            this.imagesConfigurationObjects = new System.Windows.Forms.ImageList();
             ((System.ComponentModel.ISupportInitialize)(this.splitConfiguration)).BeginInit();
             this.splitConfiguration.Panel1.SuspendLayout();
             this.splitConfiguration.Panel2.SuspendLayout();
