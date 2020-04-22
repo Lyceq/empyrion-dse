@@ -134,8 +134,9 @@ namespace DarkCity.Data
             EntityHeader entity = new EntityHeader();
             entity.Id = reader.ReadInt32();
             entity.Name = reader.ReadString();
+            entity.EntityType = (EntityTypeData)reader.ReadByte();
             entity.Position = reader.ReadVector3();
-            entity.FactionGroup = reader.ReadString();
+            entity.FactionGroup = (FactionGroupData)reader.ReadByte();
             entity.FactionId = reader.ReadInt32();
             return entity;
         }
@@ -144,8 +145,9 @@ namespace DarkCity.Data
         {
             writer.Write(entity.Id);
             writer.Write(entity.Name ?? "");
+            writer.Write((byte)entity.EntityType);
             writer.Write(entity.Position);
-            writer.Write(entity.FactionGroup ?? "");
+            writer.Write((byte)entity.FactionGroup);
             writer.Write(entity.FactionId);
         }
 

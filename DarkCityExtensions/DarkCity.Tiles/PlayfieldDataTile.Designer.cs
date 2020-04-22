@@ -33,8 +33,8 @@
             this.lblPlayfieldType = new System.Windows.Forms.Label();
             this.lblPlanetType = new System.Windows.Forms.Label();
             this.lblPlanetClass = new System.Windows.Forms.Label();
-            this.lblPlayers = new System.Windows.Forms.Label();
             this.lblEntities = new System.Windows.Forms.Label();
+            this.lblPlayers = new System.Windows.Forms.Label();
             this.listPlayers = new System.Windows.Forms.ListBox();
             this.listEntities = new System.Windows.Forms.ListBox();
             this.panel.SuspendLayout();
@@ -47,7 +47,7 @@
             this.lblName.Location = new System.Drawing.Point(0, 0);
             this.lblName.Margin = new System.Windows.Forms.Padding(3);
             this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(396, 47);
+            this.lblName.Size = new System.Drawing.Size(1297, 47);
             this.lblName.TabIndex = 0;
             this.lblName.Text = "<None>";
             this.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -73,7 +73,7 @@
             this.panel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.panel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.panel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.panel.Size = new System.Drawing.Size(396, 257);
+            this.panel.Size = new System.Drawing.Size(1297, 481);
             this.panel.TabIndex = 1;
             // 
             // lblPlayfieldType
@@ -109,6 +109,18 @@
             this.lblPlanetClass.TabIndex = 2;
             this.lblPlanetClass.Text = "Planet Class:";
             // 
+            // lblEntities
+            // 
+            this.lblEntities.AutoSize = true;
+            this.lblEntities.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEntities.Location = new System.Drawing.Point(651, 60);
+            this.lblEntities.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.lblEntities.Name = "lblEntities";
+            this.lblEntities.Size = new System.Drawing.Size(643, 13);
+            this.lblEntities.TabIndex = 4;
+            this.lblEntities.Text = "Entities";
+            this.lblEntities.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
             // lblPlayers
             // 
             this.lblPlayers.AutoSize = true;
@@ -116,22 +128,10 @@
             this.lblPlayers.Location = new System.Drawing.Point(3, 60);
             this.lblPlayers.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
             this.lblPlayers.Name = "lblPlayers";
-            this.lblPlayers.Size = new System.Drawing.Size(192, 13);
+            this.lblPlayers.Size = new System.Drawing.Size(642, 13);
             this.lblPlayers.TabIndex = 3;
             this.lblPlayers.Text = "Players";
             this.lblPlayers.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            // 
-            // lblEntities
-            // 
-            this.lblEntities.AutoSize = true;
-            this.lblEntities.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEntities.Location = new System.Drawing.Point(201, 60);
-            this.lblEntities.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-            this.lblEntities.Name = "lblEntities";
-            this.lblEntities.Size = new System.Drawing.Size(192, 13);
-            this.lblEntities.TabIndex = 4;
-            this.lblEntities.Text = "Entities";
-            this.lblEntities.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             // 
             // listPlayers
             // 
@@ -139,7 +139,7 @@
             this.listPlayers.FormattingEnabled = true;
             this.listPlayers.Location = new System.Drawing.Point(3, 76);
             this.listPlayers.Name = "listPlayers";
-            this.listPlayers.Size = new System.Drawing.Size(192, 178);
+            this.listPlayers.Size = new System.Drawing.Size(642, 402);
             this.listPlayers.Sorted = true;
             this.listPlayers.TabIndex = 5;
             // 
@@ -147,20 +147,20 @@
             // 
             this.listEntities.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listEntities.FormattingEnabled = true;
-            this.listEntities.Location = new System.Drawing.Point(201, 76);
+            this.listEntities.Location = new System.Drawing.Point(651, 76);
             this.listEntities.Name = "listEntities";
-            this.listEntities.Size = new System.Drawing.Size(192, 178);
+            this.listEntities.Size = new System.Drawing.Size(643, 402);
             this.listEntities.Sorted = true;
             this.listEntities.TabIndex = 6;
             // 
-            // PlayfieldTile
+            // PlayfieldDataTile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel);
             this.Controls.Add(this.lblName);
-            this.Name = "PlayfieldTile";
-            this.Size = new System.Drawing.Size(396, 304);
+            this.Name = "PlayfieldDataTile";
+            this.Size = new System.Drawing.Size(1297, 528);
             this.panel.ResumeLayout(false);
             this.panel.PerformLayout();
             this.ResumeLayout(false);

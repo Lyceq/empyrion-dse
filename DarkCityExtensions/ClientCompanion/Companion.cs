@@ -11,6 +11,9 @@ namespace ClientCompanion
 {
     public partial class frmClientCompanion : Form
     {
+        private LayoutSelection frmLayoutSelection = new LayoutSelection();
+        private TileSelection frmTileSelection = new TileSelection();
+
         protected List<Tile> tiles = new List<Tile>();
 
         public frmClientCompanion()
@@ -24,6 +27,27 @@ namespace ClientCompanion
             Program.Network.NoMoreReconnects += Program_NetworkNoMoreReconnects;
             Program.GameState.Updated += Program_GameStateUpdated;
 
+            this.frmLayoutSelection.Puppet = this.tileLayout;
+            this.frmLayoutSelection.VisibleChanged += (s, x) => this.mainWindowLayouts.Checked = this.frmLayoutSelection.Visible;
+            this.frmLayoutSelection.FormClosing += (s, x) =>
+            {
+                if (x.CloseReason == CloseReason.UserClosing)
+                {
+                    x.Cancel = true;
+                    this.frmLayoutSelection.Visible = false;
+                }
+            };
+
+            this.frmTileSelection.VisibleChanged += (s, x) => this.mainWindowTiles.Checked = this.frmTileSelection.Visible;
+            this.frmTileSelection.FormClosing += (s, x) =>
+            {
+                if (x.CloseReason == CloseReason.UserClosing)
+                {
+                    x.Cancel = true;
+                    this.frmTileSelection.Visible = false;
+                }
+            };
+
             this.UpdateStatus();
         }
 
@@ -35,6 +59,13 @@ namespace ClientCompanion
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            this.frmLayoutSelection.UseCustomLayout(1, 1);
+        }
+
+        #region Game Status Event Handlers
 
         public void InvokeUpdateStatus()
         {
@@ -78,6 +109,10 @@ namespace ClientCompanion
             this.InvokeUpdateStatus();
         }
 
+        #endregion
+
+        #region Network Event Handlers
+
         private void Program_NetworkConnected(Client client)
         {
             this.InvokeUpdateStatus();
@@ -105,6 +140,10 @@ namespace ClientCompanion
         {
             this.InvokeUpdateStatus();
         }
+
+        #endregion
+
+        #region File Menu Event Handlers
 
         private void mainFileConnectLocal_Click(object sender, EventArgs e)
         {
@@ -195,63 +234,80 @@ namespace ClientCompanion
             this.Close();
         }
 
+        #endregion
+
+        #region Language Menu Event Handlers
+
         private void mainLanguageSelect_Click(object sender, EventArgs e)
         {
 
         }
 
+        #endregion
+
+        #region Window Menu Event Handlers
+
         private void mainWindowFullscreen_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private LayoutSelection frmLayoutSelection = null;
-        private void mainWindowLayouts_Click(object sender, EventArgs e)
-        {
-            if (this.frmLayoutSelection == null)
+            if (this.FormBorderStyle == FormBorderStyle.None)
             {
-                this.frmLayoutSelection = new LayoutSelection();
-                this.frmLayoutSelection.Puppet = this.tileLayout;
-                this.frmLayoutSelection.Show(this);
-                this.mainWindowLayouts.Checked = true;
-            } else
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+                this.WindowState = FormWindowState.Normal;
+                this.mainWindowFullscreen.Checked = true;
+            }
+            else
             {
-                this.frmLayoutSelection.Close();
-                this.frmLayoutSelection = null;
-                this.mainWindowLayouts.Checked = false;
+                this.FormBorderStyle = FormBorderStyle.None;
+                this.WindowState = FormWindowState.Maximized;
+                this.mainWindowFullscreen.Checked = false;
             }
         }
 
-        private TileSelection frmTileSelection = null;
-        private void mainWindowTiles_Click(object sender, EventArgs e)
+        private void mainWindowLayouts_Click(object sender, EventArgs e)
         {
-            if (this.frmTileSelection == null)
+            if (this.mainWindowLayouts.Checked)
             {
-                this.frmTileSelection = new TileSelection();
-                this.frmTileSelection.Show(this);
-                this.mainWindowTiles.Checked = true;
+                this.frmLayoutSelection.Hide();
+                this.mainWindowLayouts.Checked = false;
             } else
             {
-                this.frmTileSelection.Close();
-                this.frmTileSelection = null;
+                this.frmLayoutSelection.Show(this);
+                this.mainWindowLayouts.Checked = true;
+            }
+        }
+
+        private void mainWindowTiles_Click(object sender, EventArgs e)
+        {
+            if (this.mainWindowTiles.Checked)
+            {
+                this.frmTileSelection.Hide();
                 this.mainWindowTiles.Checked = false;
+            } else
+            {
+                this.frmTileSelection.Show(this);
+                this.mainWindowTiles.Checked = true;
             }
         }
 
         private void mainWindowSaveLayout_Click(object sender, EventArgs e)
         {
-
+            // TODO: Save a layout to disk.
         }
 
         private void mainWindowLoadLayout_Click(object sender, EventArgs e)
         {
-
+            // TODO: Load a layout from disk.
         }
 
         private void mainWindowLayoutsSaved_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem layout = sender as ToolStripMenuItem;
             if (layout == null) return;
+
+            // TODO: Restore selected layout.
         }
+
+        #endregion
+
     }
 }

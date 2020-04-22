@@ -112,6 +112,7 @@ namespace DarkCity.Network
             }
 
             this.connection = null;
+            this.Reconnecting = false;
             this.reconnectFailures = this.ReconnectAttempts;
         }
 
@@ -128,6 +129,8 @@ namespace DarkCity.Network
             {
                 try
                 {
+                    if (this.Connecting != null) this.Connecting(this);
+
                     TcpClient client = new TcpClient();
                     client.Connect(this.Host);
                     this.PackageConnection(client);
@@ -136,14 +139,17 @@ namespace DarkCity.Network
                 {
                     if (++this.reconnectFailures < this.ReconnectAttempts)
                     {
+                        if (this.ConnectFailure != null) this.ConnectFailure(this);
+
                         Thread.Sleep(this.ReconnectWait);
                         Task.Run(reconnecting);
                     }
                     else
                     {
                         this.Reconnecting = false;
-                        if (this.NoMoreReconnects != null)
-                            this.NoMoreReconnects(this);
+
+                        if (this.ConnectFailure != null) this.ConnectFailure(this);
+                        if (this.NoMoreReconnects != null) this.NoMoreReconnects(this);
                     }
                 }
             };

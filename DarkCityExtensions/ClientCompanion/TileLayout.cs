@@ -47,6 +47,13 @@ namespace ClientCompanion
                 this.SetColumnSpan(tile, columnSpan);
                 this.SetRowSpan(tile, rowSpan);
             }
+
+            tile.RequestRemoval += Tile_RequestRemoval;
+        }
+
+        private void Tile_RequestRemoval(object sender, System.EventArgs e)
+        {
+            this.RemoveTile(sender as Tile);
         }
 
         public void RemoveTile(Tile tile)

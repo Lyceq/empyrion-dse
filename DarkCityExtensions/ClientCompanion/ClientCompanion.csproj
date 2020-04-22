@@ -143,10 +143,6 @@
       <Project>{95509260-84bc-4171-b839-516bc609c237}</Project>
       <Name>DarkCityCore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DarkCityExtensions\DarkCityExtensions.csproj">
-      <Project>{374e7d46-8559-453d-abfa-72db98351526}</Project>
-      <Name>DarkCityExtensions</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Add_16x.png" />

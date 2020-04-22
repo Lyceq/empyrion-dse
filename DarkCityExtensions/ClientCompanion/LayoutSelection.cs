@@ -14,36 +14,13 @@ namespace ClientCompanion
             InitializeComponent();
         }
 
-        private void lvLayouts_ItemActivate(object sender, System.EventArgs e)
+        public void UseCustomLayout(int columns, int rows, int centerColumns = 0, int centerRows = 0)
         {
-            if (this.Puppet == null) return;
-
-            ListViewItem layout = this.lvLayouts.SelectedItems[0];
-            string layoutName = layout.Text;
-
-            List<Tile> controls = this.Puppet.CollectTiles();
-            if ((controls?.Count ?? 0) > 0)
-            {
-                DialogResult result = MessageBox.Show("This will clear all tiles. Do you want to proceed?", "Clearing Tiles", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result != DialogResult.Yes) return;
-            }
-            this.Puppet.Controls.Clear();
-
-            // No special cases yet.
-            //switch (layoutName)
-            //{
-            //    // Setup special layout cases. Otherwise drop down to automatic layout calculation.
-
-            //}
-
-            string[] portions = layoutName.Split('x');
-            if (portions.Length == 2)
+            if ((centerColumns == 0) && (centerRows == 0))
             {
                 // Equal sized column and row layout.
 
                 // Calculate counts and sizes.
-                int columns = int.Parse(portions[0].Trim());
-                int rows = int.Parse(portions[1].Trim());
                 this.Puppet.ColumnCount = columns;
                 this.Puppet.RowCount = rows;
                 float width = 100.0f / columns;
@@ -57,26 +34,13 @@ namespace ClientCompanion
                 this.Puppet.RowStyles.Clear();
                 for (int r = 0; r < rows; r++) this.Puppet.RowStyles.Add(new RowStyle(SizeType.Percent, height));
             }
-            else if (portions.Length == 3)
+            else
             {
                 // Equal sized side columns or rows with larger center rows or columns.
-                
-                // Calculate counts and sizes.
-                int sideColumns = int.Parse(portions[0].Trim());
-                int sideRows = int.Parse(portions[1].Trim());
 
-                string[] centerLayout = portions[2].Trim().Split(' ');
-                int centerColumns, centerRows;
-                if (centerLayout[1].Trim().ToLower() == "horizontal")
-                {
-                    centerColumns = 0;
-                    centerRows = int.Parse(centerLayout[0].Trim());
-                }
-                else
-                {
-                    centerColumns = int.Parse(centerLayout[0].Trim());
-                    centerRows = 0;
-                }
+                // Calculate counts and sizes.
+                int sideColumns = columns;
+                int sideRows = rows;
 
                 int totalColumns = sideColumns + centerColumns;
                 int totalRows = sideRows + centerRows;
@@ -119,6 +83,66 @@ namespace ClientCompanion
             }
 
             this.Puppet.RefreshPlaceholders();
+
+        }
+
+        private void lvLayouts_ItemActivate(object sender, System.EventArgs e)
+        {
+            if (this.Puppet == null) return;
+            if (this.lvLayouts.SelectedItems.Count <= 0) return;
+
+            ListViewItem layout = this.lvLayouts.SelectedItems[0];
+            string layoutName = layout.Text;
+
+            List<Tile> controls = this.Puppet.CollectTiles();
+            if ((controls?.Count ?? 0) > 0)
+            {
+                DialogResult result = MessageBox.Show("This will clear all tiles. Do you want to proceed?", "Clearing Tiles", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result != DialogResult.Yes) return;
+            }
+            this.Puppet.Controls.Clear();
+
+            // No special cases yet.
+            //switch (layoutName)
+            //{
+            //    // Setup special layout cases. Otherwise drop down to automatic layout calculation.
+
+            //}
+
+            string[] portions = layoutName.Split('x');
+            if (portions.Length == 2)
+            {
+                // Equal sized column and row layout.
+
+                // Calculate counts and sizes.
+                int columns = int.Parse(portions[0].Trim());
+                int rows = int.Parse(portions[1].Trim());
+
+                this.UseCustomLayout(columns, rows);
+            }
+            else if (portions.Length == 3)
+            {
+                // Equal sized side columns or rows with larger center rows or columns.
+
+                // Calculate counts and sizes.
+                int sideColumns = int.Parse(portions[0].Trim());
+                int sideRows = int.Parse(portions[1].Trim());
+
+                string[] centerLayout = portions[2].Trim().Split(' ');
+                int centerColumns, centerRows;
+                if (centerLayout[1].Trim().ToLower() == "horizontal")
+                {
+                    centerColumns = 0;
+                    centerRows = int.Parse(centerLayout[0].Trim());
+                }
+                else
+                {
+                    centerColumns = int.Parse(centerLayout[0].Trim());
+                    centerRows = 0;
+                }
+
+                this.UseCustomLayout(sideColumns, sideRows, centerColumns, centerRows);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DarkCity.Network;
 using DarkCity.Trackers;
+using System;
 using System.IO;
 using System.Windows.Forms;
 
@@ -9,6 +10,8 @@ namespace DarkCity.Tiles
     {
         private Client network = null;
         private GameStateTracker gameState = null;
+
+        public event EventHandler RequestRemoval;
 
         /// <summary>
         /// A DarkCity network connection that the tile can use to interact with the game.
@@ -71,6 +74,8 @@ namespace DarkCity.Tiles
 
         }
 
+        protected void OnRemoveRequested() { }
+
         private void DispatchPacket(Client client, Packet packet)
         {
             this.Invoke((MethodInvoker)(() => {
@@ -78,5 +83,11 @@ namespace DarkCity.Tiles
             }));
         }
 
+        private void tileRemove_Click(object sender, EventArgs e)
+        {
+            this.OnRemoveRequested();
+            if (this.RequestRemoval != null)
+                this.RequestRemoval(this, null);
+        }
     }
 }

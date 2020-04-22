@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TileSelection));
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Playfield Map", "playfield");
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("Playfield Data", "placeholder");
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem("Configuration", "placeholder");
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem("Localization", "placeholder");
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("Playfield Map", "playfield");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Playfield Data", "placeholder");
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Configuration", "placeholder");
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Localization", "placeholder");
             this.imagesTiles = new System.Windows.Forms.ImageList(this.components);
             this.lvTiles = new System.Windows.Forms.ListView();
             this.SuspendLayout();
@@ -48,16 +48,16 @@
             // lvTiles
             // 
             this.lvTiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            listViewItem5.ToolTipText = "Displays a map of the selected playfield. Defaults to the client playfield.";
-            listViewItem6.ToolTipText = "Displays data regarding the selected playfield. Defaults to the client playfield." +
+            listViewItem1.ToolTipText = "Displays a map of the selected playfield. Defaults to the client playfield.";
+            listViewItem2.ToolTipText = "Displays data regarding the selected playfield. Defaults to the client playfield." +
     "";
-            listViewItem7.ToolTipText = "Displays Empyrion configuration data.";
-            listViewItem8.ToolTipText = "Displays Empyrion localization data.";
+            listViewItem3.ToolTipText = "Displays Empyrion configuration data.";
+            listViewItem4.ToolTipText = "Displays Empyrion localization data.";
             this.lvTiles.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem5,
-            listViewItem6,
-            listViewItem7,
-            listViewItem8});
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4});
             this.lvTiles.LargeImageList = this.imagesTiles;
             this.lvTiles.Location = new System.Drawing.Point(0, 0);
             this.lvTiles.MultiSelect = false;
@@ -78,6 +78,7 @@
             this.Controls.Add(this.lvTiles);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "TileSelection";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Tiles";
             this.ResumeLayout(false);

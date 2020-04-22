@@ -5,9 +5,9 @@ namespace DarkCity.Data
     {
         public int Id;
         public string Name;
-        public string EntityType;
+        public EntityTypeData EntityType;
         public Vector3 Position;
-        public string FactionGroup;
+        public FactionGroupData FactionGroup;
         public int FactionId;
         
         public EntityHeader() { }

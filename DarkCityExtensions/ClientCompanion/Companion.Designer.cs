@@ -178,46 +178,49 @@
             // mainWindowFullscreen
             // 
             this.mainWindowFullscreen.Name = "mainWindowFullscreen";
-            this.mainWindowFullscreen.ShortcutKeyDisplayString = "F11";
-            this.mainWindowFullscreen.Size = new System.Drawing.Size(147, 22);
+            this.mainWindowFullscreen.ShortcutKeyDisplayString = "";
+            this.mainWindowFullscreen.ShortcutKeys = System.Windows.Forms.Keys.F11;
+            this.mainWindowFullscreen.Size = new System.Drawing.Size(180, 22);
             this.mainWindowFullscreen.Text = "&Fullscreen";
             this.mainWindowFullscreen.Click += new System.EventHandler(this.mainWindowFullscreen_Click);
             // 
             // mainWindowSeparator1
             // 
             this.mainWindowSeparator1.Name = "mainWindowSeparator1";
-            this.mainWindowSeparator1.Size = new System.Drawing.Size(144, 6);
+            this.mainWindowSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // mainWindowLayouts
             // 
             this.mainWindowLayouts.Name = "mainWindowLayouts";
-            this.mainWindowLayouts.Size = new System.Drawing.Size(147, 22);
+            this.mainWindowLayouts.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.L)));
+            this.mainWindowLayouts.Size = new System.Drawing.Size(180, 22);
             this.mainWindowLayouts.Text = "&Layouts";
             this.mainWindowLayouts.Click += new System.EventHandler(this.mainWindowLayouts_Click);
             // 
             // mainWindowTiles
             // 
             this.mainWindowTiles.Name = "mainWindowTiles";
-            this.mainWindowTiles.Size = new System.Drawing.Size(147, 22);
+            this.mainWindowTiles.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.T)));
+            this.mainWindowTiles.Size = new System.Drawing.Size(180, 22);
             this.mainWindowTiles.Text = "&Tiles";
             this.mainWindowTiles.Click += new System.EventHandler(this.mainWindowTiles_Click);
             // 
             // mainWindowSeparator2
             // 
             this.mainWindowSeparator2.Name = "mainWindowSeparator2";
-            this.mainWindowSeparator2.Size = new System.Drawing.Size(144, 6);
+            this.mainWindowSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // mainWindowSaveLayout
             // 
             this.mainWindowSaveLayout.Name = "mainWindowSaveLayout";
-            this.mainWindowSaveLayout.Size = new System.Drawing.Size(147, 22);
+            this.mainWindowSaveLayout.Size = new System.Drawing.Size(180, 22);
             this.mainWindowSaveLayout.Text = "Save Layout...";
             this.mainWindowSaveLayout.Click += new System.EventHandler(this.mainWindowSaveLayout_Click);
             // 
             // mainWindowLoadLayout
             // 
             this.mainWindowLoadLayout.Name = "mainWindowLoadLayout";
-            this.mainWindowLoadLayout.Size = new System.Drawing.Size(147, 22);
+            this.mainWindowLoadLayout.Size = new System.Drawing.Size(180, 22);
             this.mainWindowLoadLayout.Text = "Load Layout...";
             this.mainWindowLoadLayout.Click += new System.EventHandler(this.mainWindowLoadLayout_Click);
             // 
@@ -226,7 +229,7 @@
             this.switchLayoutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mainWindowLayoutsNoSaved});
             this.switchLayoutToolStripMenuItem.Name = "switchLayoutToolStripMenuItem";
-            this.switchLayoutToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.switchLayoutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.switchLayoutToolStripMenuItem.Text = "S&witch Layout";
             // 
             // mainWindowLayoutsNoSaved
@@ -348,6 +351,7 @@
             this.tileLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tileLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tileLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tileLayout.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.tileLayout.Location = new System.Drawing.Point(0, 24);
             this.tileLayout.Name = "tileLayout";
             this.tileLayout.RowCount = 1;

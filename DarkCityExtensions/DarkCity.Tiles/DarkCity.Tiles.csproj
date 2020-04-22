@@ -53,6 +53,8 @@
     <Compile Include="ConfigurationTile.Designer.cs">
       <DependentUpon>ConfigurationTile.cs</DependentUpon>
     </Compile>
+    <Compile Include="IconLibrary.cs" />
+    <Compile Include="Marker.cs" />
     <Compile Include="NaturalTreeNodeSorter.cs" />
     <Compile Include="PlayfieldMapRender.cs" />
     <Compile Include="PlayfieldMapTile.cs">
@@ -68,6 +70,11 @@
       <DependentUpon>PlayfieldDataTile.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Tile.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -85,6 +92,10 @@
     <EmbeddedResource Include="PlayfieldDataTile.resx">
       <DependentUpon>PlayfieldDataTile.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Tile.resx">
       <DependentUpon>Tile.cs</DependentUpon>
     </EmbeddedResource>
@@ -97,6 +108,42 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\backpack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\base.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dino.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\moon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\motorcycle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\person.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\poi.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rocketship.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\starship.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tank.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ufo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
